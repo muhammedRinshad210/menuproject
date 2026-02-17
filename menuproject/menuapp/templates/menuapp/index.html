@@ -61,8 +61,16 @@ html, body {
 
 /* Carousel */
 .carousel-item {
-    height: 350px;
+    height: 350px !important;
 }
+
+@media (max-width: 768px) {
+    .carousel-item {
+        height: 200px !important;
+    }
+}
+
+
 
 .carousel-item img {
     height: 100%;
