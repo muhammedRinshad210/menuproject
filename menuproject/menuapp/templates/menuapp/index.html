@@ -156,31 +156,20 @@ html, body {
     </div>
 </nav>
 
+
 <!-- Carousel -->
-<div id="cafeCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
+<div id="cafeCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
 
 <div class="carousel-inner">
 
-<div class="carousel-item active">
-<img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1470">
-<div class="carousel-caption">
-<h2>WELCOME TO BYTE STUDIO</h2>
+{% for item in carousels %}
+<div class="carousel-item {% if forloop.first %}active{% endif %}">
+    <img src="{{ item.image.url }}">
+    <div class="carousel-caption">
+        <h2>{{ item.title }}</h2>
+    </div>
 </div>
-</div>
-
-<div class="carousel-item">
-<img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=1470">
-<div class="carousel-caption">
-<h2>FRESH COFFEE EVERYDAY</h2>
-</div>
-</div>
-
-<div class="carousel-item">
-<img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1470">
-<div class="carousel-caption">
-<h2>TASTE THE BEST MOMENTS</h2>
-</div>
-</div>
+{% endfor %}
 
 </div>
 
@@ -193,6 +182,7 @@ html, body {
 </button>
 
 </div>
+
 
 <!-- Categories -->
 <section class="categories">
