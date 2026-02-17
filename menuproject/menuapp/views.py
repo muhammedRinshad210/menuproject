@@ -54,3 +54,18 @@ def delete_carousel(request, id):
     carousel = get_object_or_404(Carousel, id=id)
     carousel.delete()
     return redirect('dashboard')
+
+
+# juice urls
+def juices(request):
+    return render(request, "menuapp/juices.html")
+
+
+# chai urls
+def chai(request):
+    return render(request, "menuapp/chai.html")
+
+
+# fastfood urls 
+def fastfood(request):
+    return render(request, "menuapp/fastfood.html")
