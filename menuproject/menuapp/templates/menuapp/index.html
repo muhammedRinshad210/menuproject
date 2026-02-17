@@ -1,3 +1,7 @@
+{% load static %}
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -190,17 +194,17 @@ html, body {
 <div class="row text-center">
 
 <div class="col-4 category-card">
-<img src="juice.png">
+<img src="{% static 'juice.png' %}" alt="juices">
 <div class="category-title">JUICES</div>
 </div>
 
 <div class="col-4 category-card">
-<img src="chaisnack.png">
+<img src="{% static 'chai.png' %}" alt="Chai">
 <div class="category-title">CHAI & SNACKS</div>
 </div>
 
 <div class="col-4 category-card">
-<img src="fastfoods.png">
+<img src="{% static 'fastfood.png' %}" alt="fastfood">
 <div class="category-title">FAST FOODS</div>
 </div>
 

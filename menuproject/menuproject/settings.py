@@ -75,14 +75,11 @@ WSGI_APPLICATION = 'menuproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'menuproject_db',
-        'USER' : 'root',
-        'PASSWORD' : '7356742758',
-        'HOST' : 'localhost',
-        'PORT' : '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
 
 
 # Password validation
