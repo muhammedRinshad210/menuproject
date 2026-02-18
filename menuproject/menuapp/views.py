@@ -90,15 +90,25 @@ def fastfood(request):
 
 def edit_product(request, id):
     product = get_object_or_404(MenuItem, id=id)
-    form = MenuItemForm(instance=product)
+    carousels = Carousel.objects.all().order_by('-id')
+    products = MenuItem.objects.all().order_by('-id')
+
+    product_form = MenuItemForm(instance=product)
+    carousel_form = CarouselForm()
 
     if request.method == "POST":
-        form = MenuItemForm(request.POST, request.FILES, instance=product)
-        if form.is_valid():
-            form.save()
+        product_form = MenuItemForm(request.POST, request.FILES, instance=product)
+        if product_form.is_valid():
+            product_form.save()
             return redirect("dashboard")
 
-    return render(request, "menuapp/admin/edit_product.html", {"form": form})
+    return render(request, "menuapp/admin/dashboard.html", {
+        "form": carousel_form,
+        "product_form": product_form,
+        "carousels": carousels,
+        "products": products
+    })
+
 
 
 def delete_product(request, id):
