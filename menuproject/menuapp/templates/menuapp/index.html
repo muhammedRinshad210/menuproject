@@ -1,7 +1,4 @@
 {% load static %}
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,13 +40,12 @@ html, body {
     font-size: 22px;
 }
 
-/* Icons */
 .nav-icons {
     margin-left: auto;
 }
 
 .nav-icon {
-    font-size: 24px;
+    font-size: 22px;
     color: #fff3e0;
     margin-left: 15px;
     text-decoration: none;
@@ -66,17 +62,15 @@ html, body {
 
 @media (max-width: 768px) {
     .carousel-item {
-        height: 200px !important;
+        height: 220px !important;
     }
 }
-
-
 
 .carousel-item img {
     height: 100%;
     width: 100%;
     object-fit: cover;
-    filter: brightness(40%);
+    filter: brightness(45%);
 }
 
 .carousel-caption {
@@ -92,6 +86,12 @@ html, body {
     text-shadow: 3px 3px 10px rgba(0,0,0,0.7);
 }
 
+@media(max-width:768px){
+    .carousel-caption h2 {
+        font-size: 22px;
+    }
+}
+
 /* Categories */
 .categories {
     background: #fff3e0;
@@ -104,7 +104,7 @@ html, body {
 }
 
 .category-card img {
-    width: 160px;
+    width: 150px;
     transition: 0.3s;
 }
 
@@ -119,25 +119,7 @@ html, body {
     font-size: 18px;
 }
 
-/* Footer */
-.footer {
-    background: #3e2723;
-    color: white;
-    text-align: center;
-    padding: 15px;
-    margin-top: auto;
-}
-
-/* Mobile adjustments */
 @media(max-width:768px){
-    .carousel-item {
-        height: 260px;
-    }
-
-    .carousel-caption h2 {
-        font-size: 22px;
-    }
-
     .category-card img {
         width: 100px;
     }
@@ -147,39 +129,59 @@ html, body {
     }
 }
 
-</style>
+/* Footer */
+.footer {
+    background: #3e2723;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: auto;
+}
 
+</style>
 </head>
+
 <body>
 
 <div class="wrapper">
 
 <!-- Navbar -->
 <nav class="navbar d-flex align-items-center">
-    <a class="navbar-brand" href="#">BYTE STUDIO</a>
+    <a class="navbar-brand" href="/">BYTE STUDIO</a>
 
     <div class="nav-icons">
+
+        <!-- Bucket / Cart -->
+        <a href="{% url 'cart' %}" class="nav-icon">
+            <i class="bi bi-bucket"></i>
+        </a>
+
         <a href="#" class="nav-icon">
             <i class="bi bi-question-circle"></i>
         </a>
+
         <a href="#" class="nav-icon">
             <i class="bi bi-chat-dots"></i>
         </a>
+
     </div>
 </nav>
 
-
 <!-- Carousel -->
-<div id="cafeCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
+<div id="cafeCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2500">
 
 <div class="carousel-inner">
 
 {% for item in carousels %}
 <div class="carousel-item {% if forloop.first %}active{% endif %}">
-    <img src="{{ item.image.url }}">
+    <img src="{{ item.image.url }}" alt="{{ item.title }}">
     <div class="carousel-caption">
         <h2>{{ item.title }}</h2>
     </div>
+</div>
+{% empty %}
+<div class="carousel-item active">
+    <img src="{% static 'default.jpg' %}">
 </div>
 {% endfor %}
 
@@ -195,7 +197,6 @@ html, body {
 
 </div>
 
-
 <!-- Categories -->
 <section class="categories">
 <div class="container">
@@ -203,22 +204,21 @@ html, body {
 
 <div class="col-4 category-card">
     <a href="{% url 'juices' %}">
-        <img src="{% static 'juice.png' %}" alt="juices">
+        <img src="{% static 'juice.png' %}">
     </a>
-        <div class="category-title">JUICES</div>
-    
+    <div class="category-title">JUICES</div>
 </div>
 
 <div class="col-4 category-card">
     <a href="{% url 'chai' %}">
-        <img src="{% static 'chai.png' %}" alt="Chai">
+        <img src="{% static 'chai.png' %}">
     </a>
     <div class="category-title">CHAI & SNACKS</div>
 </div>
 
 <div class="col-4 category-card">
     <a href="{% url 'fastfood' %}">
-        <img src="{% static 'fastfood.png' %}" alt="fastfood">
+        <img src="{% static 'fastfood.png' %}">
     </a>
     <div class="category-title">FAST FOODS</div>
 </div>

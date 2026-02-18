@@ -15,20 +15,36 @@ def home(request):
     return render(request, 'menuapp/index.html', {'carousels': carousels})
 
 
-# Dashboard Page
+from .models import Carousel, MenuItem
+from .forms import CarouselForm, MenuItemForm
+from django.shortcuts import render, redirect, get_object_or_404
+
 def dashboard(request):
     carousels = Carousel.objects.all().order_by('-id')
-    form = CarouselForm()
+    products = MenuItem.objects.all().order_by('-id')
 
-    if request.method == 'POST':
-        form = CarouselForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('dashboard')
+    carousel_form = CarouselForm()
+    product_form = MenuItemForm()
 
-    return render(request, 'menuapp/admin/dashboard.html', {
-        'form': form,
-        'carousels': carousels
+    # ---- Carousel submit ----
+    if request.method == "POST" and "carousel_submit" in request.POST:
+        carousel_form = CarouselForm(request.POST, request.FILES)
+        if carousel_form.is_valid():
+            carousel_form.save()
+            return redirect("dashboard")
+
+    # ---- Product submit ----
+    if request.method == "POST" and "product_submit" in request.POST:
+        product_form = MenuItemForm(request.POST, request.FILES)
+        if product_form.is_valid():
+            product_form.save()
+            return redirect("dashboard")
+
+    return render(request, "menuapp/admin/dashboard.html", {
+        "form": carousel_form,
+        "product_form": product_form,
+        "carousels": carousels,
+        "products": products
     })
 
 
@@ -55,17 +71,74 @@ def delete_carousel(request, id):
     carousel.delete()
     return redirect('dashboard')
 
+from .models import MenuItem, Cart
+from django.shortcuts import redirect
 
-# juice urls
 def juices(request):
-    return render(request, "menuapp/juices.html")
+    items = MenuItem.objects.filter(category="juice")
+    return render(request, "menuapp/juices.html", {"items": items})
 
-
-# chai urls
 def chai(request):
-    return render(request, "menuapp/chai.html")
+    items = MenuItem.objects.filter(category="chai")
+    return render(request, "menuapp/chai.html", {"items": items})
 
-
-# fastfood urls 
 def fastfood(request):
-    return render(request, "menuapp/fastfood.html")
+    items = MenuItem.objects.filter(category="fastfood")
+    return render(request, "menuapp/fastfood.html", {"items": items})
+
+
+
+def edit_product(request, id):
+    product = get_object_or_404(MenuItem, id=id)
+    form = MenuItemForm(instance=product)
+
+    if request.method == "POST":
+        form = MenuItemForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect("dashboard")
+
+    return render(request, "menuapp/admin/edit_product.html", {"form": form})
+
+
+def delete_product(request, id):
+    product = get_object_or_404(MenuItem, id=id)
+    product.delete()
+    return redirect("dashboard")
+
+
+
+
+
+
+from django.shortcuts import get_object_or_404, redirect
+
+def add_to_cart(request, id):
+    item = get_object_or_404(MenuItem, id=id)
+
+    # Stop if no stock
+    if item.quantity <= 0:
+        return redirect('cart')
+
+    cart_item, created = Cart.objects.get_or_create(item=item)
+
+    if not created:
+        cart_item.quantity += 1
+    cart_item.save()
+
+    # decrease stock
+    item.quantity -= 1
+    item.save()
+
+    return redirect('cart')
+
+
+# Cart page
+def cart_page(request):
+    cart_items = Cart.objects.all()
+    total = sum(i.total_price() for i in cart_items)
+
+    return render(request, "menuapp/cart.html", {
+        "cart_items": cart_items,
+        "total": total
+    })
