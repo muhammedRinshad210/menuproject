@@ -177,7 +177,10 @@
 {% endif %}
 
 
-<a href="#" class="btn btn-buy btn-sm">Order Now</a>
+<a href="{% url 'add_to_cart' item.id %}" class="btn btn-buy btn-sm">
+    Order Now
+</a>
+
 </div>
 
 </div>

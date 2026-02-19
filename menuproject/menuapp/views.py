@@ -123,17 +123,19 @@ def delete_product(request, id):
 
 from django.shortcuts import get_object_or_404, redirect
 
-def add_to_cart(request, id):
-    item = get_object_or_404(MenuItem, id=id)
+def add_to_cart(request, item_id):
+    item = get_object_or_404(MenuItem, id=item_id)
 
-    # Stop if no stock
     if item.quantity <= 0:
         return redirect('cart')
 
-    cart_item, created = Cart.objects.get_or_create(item=item)
+    cart_item = Cart.objects.filter(item=item).first()
 
-    if not created:
+    if cart_item:
         cart_item.quantity += 1
+    else:
+        cart_item = Cart.objects.create(item=item, quantity=1)
+
     cart_item.save()
 
     # decrease stock
@@ -141,6 +143,9 @@ def add_to_cart(request, id):
     item.save()
 
     return redirect('cart')
+
+
+
 
 
 # Cart page
@@ -152,3 +157,36 @@ def cart_page(request):
         "cart_items": cart_items,
         "total": total
     })
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Cart
+
+
+def increase_cart(request, cart_id):
+    cart = get_object_or_404(Cart, id=cart_id)
+    cart.quantity += 1
+    cart.save()
+    return redirect('cart')
+
+
+def decrease_cart(request, cart_id):
+    cart = get_object_or_404(Cart, id=cart_id)
+
+    if cart.quantity > 1:
+        cart.quantity -= 1
+        cart.save()
+    else:
+        cart.delete()
+
+    return redirect('cart')
+
+
+def remove_cart(request, cart_id):
+    cart = get_object_or_404(Cart, id=cart_id)
+    cart.delete()
+    return redirect('cart')
+
+
+def checkout(request):
+    return render(request, 'menuapp/checkout.html')
+
+

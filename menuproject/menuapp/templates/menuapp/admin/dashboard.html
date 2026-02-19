@@ -31,7 +31,10 @@
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-dark">Save</button>
+    <button type="submit" name="carousel_submit" class="btn btn-dark">
+    Save
+</button>
+
 </form>
 
 <hr>
@@ -42,7 +45,7 @@
 <tr>
     <th>Image</th>
     <th>Title</th>
-    <th>Actions</th>
+    <th>Quantity</th>
 </tr>
 
 {% for item in carousels %}
