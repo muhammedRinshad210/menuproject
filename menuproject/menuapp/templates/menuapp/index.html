@@ -241,6 +241,46 @@ body {
         font-size: 22px;
     }
 }
+.floating-btn{
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+
+    width: 90px;
+    height: 90px;
+
+    background: #ff5722;
+    color: white;
+    font-size: 44px;
+
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-decoration: none;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+    z-index: 9999;
+
+    transition: all 0.25s ease;  /* 🔥 smooth animation */
+}
+.floating-btn:hover{
+    transform: translateY(-6px) scale(1.0);  /* 🔥 small move */
+    box-shadow: 0 12px 30px rgba(0,0,0,0.45);
+}
+
+@media (max-width:768px){
+
+    .floating-btn{
+        width: 60px;
+        height: 60px;
+        font-size: 26px;
+        bottom: 16px;
+        right: 16px;
+    }
+
+}
+
 
 
 </style>
@@ -335,6 +375,10 @@ body {
         </div>
     </div>
 </section>
+<!-- Floating Home Button -->
+{% if cart_count > 0 %}
+<a href="{% url 'cart' %}" class="floating-btn">🛒</a>
+{% endif %}
 
 
 {% endblock %}

@@ -51,6 +51,19 @@ body{
     padding:15px;
     margin-top:40px;
 }
+.modal-dialog-end {
+    position: fixed;
+    right: 0;
+    margin: 0;
+    height: 100%;
+    max-width: 350px;
+}
+
+.modal-content {
+    height: 100%;
+    border-radius: 0;
+}
+
 </style>
 
 {% block extra_css %}{% endblock %}
@@ -76,6 +89,40 @@ body{
         </a>
     </div>
 </nav>
+<!-- CART MODAL -->
+<div class="modal fade" id="cartModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-end">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Your Cart</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+
+        {% if cart_items %}
+            {% for item in cart_items %}
+                <div class="d-flex justify-content-between mb-2">
+                    <span>{{ item.product.name }}</span>
+                    <span>₹ {{ item.product.price }}</span>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-center">Cart is empty</p>
+        {% endif %}
+
+      </div>
+
+      <div class="modal-footer">
+        <a href="{% url 'cart' %}" class="btn btn-dark w-100">
+            View Full Cart
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <!-- ===== Page Content ===== -->
 {% block content %}{% endblock %}

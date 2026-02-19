@@ -12,14 +12,20 @@ from .forms import CarouselForm
 # Home Page
 from .models import Carousel, SpecialItem
 
+from .models import Cart
+
 def home(request):
     carousels = Carousel.objects.all().order_by('-id')
     special_items = SpecialItem.objects.all().order_by('-id')
 
+    cart_count = Cart.objects.count()
+
     return render(request, 'menuapp/index.html', {
         'carousels': carousels,
         'special_items': special_items,
+        'cart_count': cart_count
     })
+
 
 
 from .models import Carousel, MenuItem, SpecialItem
