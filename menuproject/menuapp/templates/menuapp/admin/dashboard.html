@@ -131,5 +131,63 @@
 
 </div>
 
+<!-- ================= SPECIAL ITEMS SECTION ================= -->
+
+<div class="section-box">
+
+<h2>Add Special Item</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ special_form.as_p }}
+    <button type="submit" name="special_submit" class="btn btn-primary">
+        Add Special Item
+    </button>
+</form>
+
+<hr>
+
+<h4>Special Items List</h4>
+
+<table class="table table-bordered">
+<tr>
+    <th>Image</th>
+    <th>Name</th>
+    <th>Price</th>
+    <th>Description</th>
+    <th>Actions</th>
+</tr>
+
+{% for item in special_items %}
+<tr>
+    <td>
+        <img src="{{ item.image.url }}" width="100">
+    </td>
+    <td>{{ item.name }}</td>
+    <td>₹ {{ item.price }}</td>
+    <td>{{ item.description|truncatewords:10 }}</td>
+    <td>
+        <a href="{% url 'edit_special' item.id %}"
+           class="btn btn-warning btn-sm">Edit</a>
+
+        <a href="{% url 'delete_special' item.id %}"
+           class="btn btn-danger btn-sm"
+           onclick="return confirm('Delete this special item?')">
+           Delete
+        </a>
+    </td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="5" class="text-center">No special items added yet.</td>
+</tr>
+{% endfor %}
+
+</table>
+
+</div>
+
+
+
 </body>
 </html>

@@ -28,3 +28,16 @@ class Cart(models.Model):
         if self.item.offer_price:
             return self.item.offer_price * self.quantity
         return self.item.price * self.quantity
+
+
+
+from django.db import models
+
+class SpecialItem(models.Model):
+    name = models.CharField(max_length=200)
+    image = models.ImageField(upload_to='special_items/')
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.name

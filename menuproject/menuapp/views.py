@@ -10,21 +10,31 @@ from .forms import CarouselForm
 
 
 # Home Page
+from .models import Carousel, SpecialItem
+
 def home(request):
     carousels = Carousel.objects.all().order_by('-id')
-    return render(request, 'menuapp/index.html', {'carousels': carousels})
+    special_items = SpecialItem.objects.all().order_by('-id')
+
+    return render(request, 'menuapp/index.html', {
+        'carousels': carousels,
+        'special_items': special_items,
+    })
 
 
-from .models import Carousel, MenuItem
-from .forms import CarouselForm, MenuItemForm
+from .models import Carousel, MenuItem, SpecialItem
+from .forms import CarouselForm, MenuItemForm, SpecialItemForm
 from django.shortcuts import render, redirect, get_object_or_404
+
 
 def dashboard(request):
     carousels = Carousel.objects.all().order_by('-id')
     products = MenuItem.objects.all().order_by('-id')
+    special_items = SpecialItem.objects.all().order_by('-id')
 
     carousel_form = CarouselForm()
     product_form = MenuItemForm()
+    special_form = SpecialItemForm()
 
     # ---- Carousel submit ----
     if request.method == "POST" and "carousel_submit" in request.POST:
@@ -40,12 +50,25 @@ def dashboard(request):
             product_form.save()
             return redirect("dashboard")
 
+    # ---- Special Item submit ----
+    if request.method == "POST" and "special_submit" in request.POST:
+        special_form = SpecialItemForm(request.POST, request.FILES)
+        if special_form.is_valid():
+            special_form.save()
+            return redirect("dashboard")
+
     return render(request, "menuapp/admin/dashboard.html", {
         "form": carousel_form,
         "product_form": product_form,
+        "special_form": special_form,
         "carousels": carousels,
-        "products": products
+        "products": products,
+        "special_items": special_items
     })
+
+
+
+
 
 
 # Edit Carousel
@@ -190,3 +213,16 @@ def checkout(request):
     return render(request, 'menuapp/checkout.html')
 
 
+def edit_special(request, id):
+    item = SpecialItem.objects.get(id=id)
+    form = SpecialItemForm(request.POST or None, request.FILES or None, instance=item)
+    if form.is_valid():
+        form.save()
+        return redirect('dashboard')
+    return render(request, 'dashboard.html', {'special_form': form})
+
+
+def delete_special(request, id):
+    item = SpecialItem.objects.get(id=id)
+    item.delete()
+    return redirect('dashboard')

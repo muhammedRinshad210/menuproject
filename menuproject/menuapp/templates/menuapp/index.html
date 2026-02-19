@@ -5,23 +5,23 @@
 <style>
 
 /* =========================
-   CAROUSEL FULL FIX
+   MODERN CAROUSEL
    ========================= */
 
-/* Main carousel height (PC) */
 #cafeCarousel {
-    height: 75vh;
-    min-height: 500px;
+    height: 400px;
     position: relative;
 }
 
-/* Make inner elements full height */
 #cafeCarousel .carousel-inner,
 #cafeCarousel .carousel-item {
     height: 100%;
 }
 
-/* Image styling */
+#cafeCarousel .carousel-item {
+    transition: opacity 1s ease-in-out;
+}
+
 #cafeCarousel .carousel-item img {
     width: 100%;
     height: 100%;
@@ -29,43 +29,53 @@
     object-position: center;
 }
 
-/* Dark overlay (instead of blur) */
+/* Dark overlay */
 #cafeCarousel .carousel-item::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.55);
+    background: rgba(0, 0, 0, 0.45);
     z-index: 1;
 }
 
-/* Caption center */
+/* Center caption */
 #cafeCarousel .carousel-caption {
     position: absolute;
     z-index: 2;
-    bottom: 50%;
-    transform: translateY(50%);
+    top: 50%;
+    transform: translateY(-50%);
+    bottom: auto;
     text-align: center;
 }
 
-/* Caption text */
 #cafeCarousel .carousel-caption h2 {
-    font-size: 48px;
+    font-size: 36px;
     font-weight: 900;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    text-shadow: 3px 3px 10px rgba(0,0,0,0.8);
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.9);
 }
 
-/* Mobile height */
+/* ===== SMALL MOBILE CAROUSEL ===== */
 @media (max-width: 768px) {
+
     #cafeCarousel {
-        height: 100%;
-        min-height: 250px;
+        height: 25vh;
     }
 
     #cafeCarousel .carousel-caption h2 {
-        font-size: 22px;
+        font-size: 20px;
     }
+}
+
+/* Remove extra space */
+.carousel {
+    margin-bottom: 0 !important;
+}
+
+body {
+    margin: 0;
+    padding: 0;
 }
 
 /* =========================
@@ -77,34 +87,158 @@
     padding: 40px 0;
 }
 
+.category-heading {
+    text-align: center;
+    font-weight: 900;
+    font-size: 38px;
+    color: #3e2723;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+/* Stylish underline */
+.category-heading::after {
+    content: "";
+    width: 90px;
+    height: 4px;
+    background: #ff9800;
+    display: block;
+    margin: 12px auto 0;
+    border-radius: 5px;
+}
+
+/* Category cards */
 .category-card {
     text-align: center;
     cursor: pointer;
-}
-
-.category-card img {
-    width: 150px;
     transition: 0.3s;
 }
 
-.category-card img:hover {
+.category-card img {
+    width: 120px;
+    transition: 0.3s;
+}
+
+.category-card:hover img {
     transform: scale(1.1);
 }
 
 .category-title {
     margin-top: 12px;
-    font-weight: bold;
+    font-weight: 700;
     color: #3e2723;
-    font-size: 18px;
+    font-size: 16px;
 }
 
+/* ===== MOBILE FIXES ===== */
 @media(max-width:768px){
+
+    .category-heading {
+        font-size: 22px;      /* Smaller heading */
+        letter-spacing: 1px;
+        margin-bottom: 25px;
+    }
+
+    .category-heading::after {
+        width: 50px;         /* Smaller underline */
+        height: 3px;
+        margin-top: 8px;
+    }
+
     .category-card img {
-        width: 100px;
+        width: 85px;
     }
 
     .category-title {
-        font-size: 14px;
+        font-size: 13px;
+    }
+}
+
+/* =========================
+   SPECIAL ITEMS SECTION
+   ========================= */
+
+.special-section {
+    padding: 50px 0;
+    background: #4f4c4c74;
+}
+
+.special-heading {
+    text-align: center;
+    font-weight: 900;
+    font-size: 32px;
+    margin-bottom: 40px;
+    color: #3e2723;
+    text-transform: uppercase;
+    position: relative;
+}
+
+.special-heading::after {
+    content: "";
+    width: 70px;
+    height: 4px;
+    background: #ff9800;
+    display: block;
+    margin: 10px auto 0;
+    border-radius: 4px;
+}
+
+/* 5 cards per row on desktop */
+.col-lg-2-4 {
+    width: 20%;
+}
+
+.special-card {
+    margin-bottom: 25px;
+}
+
+.card-box {
+    background: #3e2723;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    transition: 0.3s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.card-box:hover {
+    transform: translateY(-6px);
+}
+
+.card-box img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.card-box h5 {
+    margin-top: 12px;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.price {
+    color: #ff9800;
+    font-weight: 800;
+    margin-top: 5px;
+}
+
+/* ===== MOBILE 2 CARDS ===== */
+@media (max-width: 768px) {
+
+    .col-lg-2-4 {
+        width: 50%;
+    }
+
+    .card-box img {
+        height: 120px;
+    }
+
+    .special-heading {
+        font-size: 22px;
     }
 }
 
@@ -115,7 +249,7 @@
 {% block content %}
 
 <!-- Carousel -->
-<div id="cafeCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2500">
+<div id="cafeCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="3500">
 
 <div class="carousel-inner">
 
@@ -146,6 +280,8 @@
 
 <!-- Categories -->
 <section class="categories">
+    <h1 class="category-heading">Choose Your Category</h1>
+
 <div class="container">
 <div class="row text-center">
 
@@ -173,5 +309,32 @@
 </div>
 </div>
 </section>
+
+
+
+<!-- =========================
+     SPECIAL ITEMS SECTION
+     ========================= -->
+
+<section class="special-section">
+    <div class="container">
+        <h2 class="special-heading">Special Items</h2>
+
+        <div class="row">
+
+            {% for item in special_items %}
+            <div class="col-lg-2-4 col-md-4 col-6 special-card">
+                <div class="card-box">
+                    <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                    <h5>{{ item.name }}</h5>
+                    <p class="price">₹ {{ item.price }}</p>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+
 
 {% endblock %}
