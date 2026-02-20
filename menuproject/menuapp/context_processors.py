@@ -7,3 +7,4 @@ def cart_data(request):
 def cart_count(request):
     count = Cart.objects.count()
     return {"cart_count": count}
+

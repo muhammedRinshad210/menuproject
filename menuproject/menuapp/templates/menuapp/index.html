@@ -56,6 +56,8 @@
     text-shadow: 2px 2px 10px rgba(0,0,0,0.9);
 }
 
+
+
 /* ===== SMALL MOBILE CAROUSEL ===== */
 @media (max-width: 768px) {
 
@@ -241,6 +243,10 @@ body {
         font-size: 22px;
     }
 }
+
+
+/* ===== CART BADGE ===== */
+
 .floating-btn{
     position: fixed;
     bottom: 24px;
@@ -262,13 +268,32 @@ body {
     box-shadow: 0 8px 25px rgba(0,0,0,0.35);
     z-index: 9999;
 
-    transition: all 0.25s ease;  /* 🔥 smooth animation */
-}
-.floating-btn:hover{
-    transform: translateY(-6px) scale(1.0);  /* 🔥 small move */
-    box-shadow: 0 12px 30px rgba(0,0,0,0.45);
+    transition: all 0.25s ease;
 }
 
+/* 🔴 Badge */
+
+.cart-badge{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    background: red;
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    min-width: 26px;
+    height: 26px;
+
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: 0 0 0 3px white;
+}
 @media (max-width:768px){
 
     .floating-btn{
@@ -279,8 +304,15 @@ body {
         right: 16px;
     }
 
-}
+    .cart-badge{
+        top: 4px;
+        right: 4px;
+        font-size: 12px;
+        min-width: 18px;
+        height: 18px;
+    }
 
+}
 
 
 </style>
@@ -377,7 +409,13 @@ body {
 </section>
 <!-- Floating Home Button -->
 {% if cart_count > 0 %}
-<a href="{% url 'cart' %}" class="floating-btn">🛒</a>
+<a href="{% url 'cart' %}" class="floating-btn">
+
+    🛒
+
+    <span class="cart-badge">{{ cart_count }}</span>
+
+</a>
 {% endif %}
 
 
