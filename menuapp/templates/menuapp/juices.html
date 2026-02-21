@@ -1,0 +1,195 @@
+{% extends "menuapp/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+
+/* ===== Banner ===== */
+.banner{
+    height:60vh;   /* Same height for all devices */
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                url("{% static 'juicefs.png' %}") center/cover no-repeat;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:white;
+}
+
+.banner h1{
+    font-size:48px;
+    font-weight:bold;
+}
+
+.banner p{
+    font-size:18px;
+}
+
+/* ===== Section ===== */
+.menu-section{
+    padding:40px 0;
+}
+
+/* ===== Card ===== */
+.card{
+    border:none;
+    border-radius:12px;
+    background:#fff3e0;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    transition:0.3s;
+    height:100%;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+}
+
+/* ===== Image ===== */
+.card img{
+    height:180px;
+    width:100%;
+    object-fit:contain;
+    background:#fff;
+    padding:10px;
+    border-top-left-radius:12px;
+    border-top-right-radius:12px;
+}
+
+/* ===== Text ===== */
+.card h6{
+    font-weight:bold;
+    color:#3e2723;
+    margin-bottom:5px;
+}
+
+.price-old{
+    text-decoration:line-through;
+    color:#777;
+    font-size:14px;
+}
+
+.price-new{
+    color:#3e2723;
+    font-weight:bold;
+    font-size:16px;
+}
+
+/* ===== Buttons ===== */
+.btn-bucket{
+    background:#6d4c41;
+    color:white;
+}
+
+.btn-bucket:hover{
+    background:#4e342e;
+    color:white;
+}
+
+.btn-buy{
+    background:#3e2723;
+    color:white;
+}
+
+.btn-buy:hover{
+    background:#1b0f0d;
+    color:white;
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media(max-width:768px){
+
+    /* Banner stays same height */
+    .banner{
+        height:20vh;  /* same as PC */
+    }
+
+    /* Slightly reduce text only */
+    .banner h1{
+        font-size:20px;
+    }
+
+    .banner p{
+        font-size:10px;
+    }
+
+    /* Card adjustments */
+    .card img{
+        height:140px;
+    }
+
+    .card h6{
+        font-size:14px;
+    }
+
+    .price-old{
+        font-size:12px;
+    }
+
+    .price-new{
+        font-size:14px;
+    }
+
+    .btn-sm{
+        font-size:11px;
+        padding:4px 6px;
+    }
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="banner">
+    <div>
+        <h1>Fresh Juices</h1>
+        <p>Cool • Healthy • Refreshing</p>
+    </div>
+</section>
+
+<div class="container menu-section">
+<h2 class="text-center mb-4 fw-bold">Fresh Juices</h2>
+
+<div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3">
+
+{% for item in items %}
+<div class="col">
+<div class="card h-100">
+
+<img src="{{ item.image.url }}">
+
+<div class="card-body text-center">
+
+<h6>{{ item.name }}</h6>
+
+<span class="price-old">₹ {{ item.price }}</span><br>
+<span class="price-new">₹ {{ item.offer_price }}</span>
+
+<div class="d-flex justify-content-center gap-2 mt-2">
+{% if item.quantity > 0 %}
+<a href="{% url 'add_to_cart' item.id %}" class="btn btn-warning btn-sm">
+    Add Bucket
+</a>
+{% else %}
+<button class="btn btn-secondary btn-sm" disabled>
+    Out of Stock
+</button>
+{% endif %}
+
+
+<a href="#" class="btn btn-buy btn-sm">
+    Order Now
+</a>
+
+</div>
+
+</div>
+</div>
+</div>
+
+{% endfor %}
+
+</div>
+</div>
+
+{% endblock %}
