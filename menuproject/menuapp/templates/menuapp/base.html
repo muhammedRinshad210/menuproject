@@ -64,6 +64,41 @@ body{
     border-radius: 0;
 }
 
+.floating-btn{
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 90px;
+    height: 90px;
+    background: #ff5722;
+    color: white;
+    font-size: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+    z-index: 9999;
+}
+
+.cart-badge{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: red;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    min-width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 3px white;
+}
+
 </style>
 
 {% block extra_css %}{% endblock %}
@@ -126,7 +161,12 @@ body{
 
 <!-- ===== Page Content ===== -->
 {% block content %}{% endblock %}
-
+{% if cart_count > 0 %}
+<a href="{% url 'cart' %}" class="floating-btn">
+    🪣
+    <span class="cart-badge">{{ cart_count }}</span>
+</a>
+{% endif %}
 <!-- ===== Footer ===== -->
 <footer class="footer">
 © 2026 BYTE STUDIO — All Rights Reserved

@@ -23,6 +23,7 @@ class MenuItem(models.Model):
 class Cart(models.Model):
     item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
+    session_key = models.CharField(max_length=100, null=True, blank=True)
 
     def total_price(self):
         if self.item.offer_price:

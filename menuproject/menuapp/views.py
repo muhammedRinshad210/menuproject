@@ -155,19 +155,27 @@ from django.shortcuts import get_object_or_404, redirect
 def add_to_cart(request, item_id):
     item = get_object_or_404(MenuItem, id=item_id)
 
+    if not request.session.session_key:
+        request.session.create()
+
+    session_key = request.session.session_key
+
     if item.quantity <= 0:
         return redirect('cart')
 
-    cart_item = Cart.objects.filter(item=item).first()
+    cart_item = Cart.objects.filter(item=item, session_key=session_key).first()
 
     if cart_item:
         cart_item.quantity += 1
     else:
-        cart_item = Cart.objects.create(item=item, quantity=1)
+        cart_item = Cart.objects.create(
+            item=item,
+            quantity=1,
+            session_key=session_key
+        )
 
     cart_item.save()
 
-    # decrease stock
     item.quantity -= 1
     item.save()
 
@@ -176,10 +184,10 @@ def add_to_cart(request, item_id):
 
 
 
-
 # Cart page
 def cart_page(request):
-    cart_items = Cart.objects.all()
+    session_key = request.session.session_key
+    cart_items = Cart.objects.filter(session_key=session_key)
     total = sum(i.total_price() for i in cart_items)
 
     return render(request, "menuapp/cart.html", {
@@ -232,3 +240,19 @@ def delete_special(request, id):
     item = SpecialItem.objects.get(id=id)
     item.delete()
     return redirect('dashboard')
+
+
+from .models import Cart
+
+def cart_count(request):
+    session_key = request.session.session_key
+
+    if not session_key:
+        request.session.create()
+        session_key = request.session.session_key
+
+    count = Cart.objects.filter(session_key=session_key).count()
+
+    return {
+        'cart_count': count
+    }
