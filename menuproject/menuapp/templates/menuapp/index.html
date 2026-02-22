@@ -5,326 +5,267 @@
 <style>
 
 /* =========================
+   GLOBAL THEME COLORS
+   ========================= */
+
+:root{
+    --primary-brown:#3e2723;
+    --secondary-brown:#5d4037;
+    --accent-orange:#ff9800;
+    --light-bg:#fff8f3;
+}
+
+/* Remove unwanted spacing */
+body{
+    margin:0;
+    padding:0;
+    background:var(--light-bg);
+}
+
+.carousel{
+    margin-bottom:0 !important;
+}
+
+
+/* =========================
    MODERN CAROUSEL
    ========================= */
 
-#cafeCarousel {
-    height: 400px;
-    position: relative;
+#cafeCarousel{
+    height:400px;
+    position:relative;
 }
 
 #cafeCarousel .carousel-inner,
-#cafeCarousel .carousel-item {
-    height: 100%;
+#cafeCarousel .carousel-item{
+    height:100%;
 }
 
-#cafeCarousel .carousel-item {
-    transition: opacity 1s ease-in-out;
+#cafeCarousel .carousel-item img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
 }
 
-#cafeCarousel .carousel-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
+#cafeCarousel .carousel-item::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.45);
+    z-index:1;
 }
 
-/* Dark overlay */
-#cafeCarousel .carousel-item::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45);
-    z-index: 1;
+#cafeCarousel .carousel-caption{
+    position:absolute;
+    z-index:2;
+    top:50%;
+    transform:translateY(-50%);
+    bottom:auto;
+    text-align:center;
 }
 
-/* Center caption */
-#cafeCarousel .carousel-caption {
-    position: absolute;
-    z-index: 2;
-    top: 50%;
-    transform: translateY(-50%);
-    bottom: auto;
-    text-align: center;
+#cafeCarousel .carousel-caption h2{
+    font-size:36px;
+    font-weight:900;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:white;
 }
 
-#cafeCarousel .carousel-caption h2 {
-    font-size: 36px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-shadow: 2px 2px 10px rgba(0,0,0,0.9);
+@media(max-width:768px){
+    #cafeCarousel{ height:25vh; }
+    #cafeCarousel .carousel-caption h2{ font-size:20px; }
 }
 
-
-
-/* ===== SMALL MOBILE CAROUSEL ===== */
-@media (max-width: 768px) {
-
-    #cafeCarousel {
-        height: 25vh;
-    }
-
-    #cafeCarousel .carousel-caption h2 {
-        font-size: 20px;
-    }
-}
-
-/* Remove extra space */
-.carousel {
-    margin-bottom: 0 !important;
-}
-
-body {
-    margin: 0;
-    padding: 0;
-}
 
 /* =========================
    CATEGORIES SECTION
    ========================= */
 
-.categories {
-    background: #fff3e0;
-    padding: 40px 0;
+.categories{
+    background:white;
+    padding:50px 0;
 }
 
-.category-heading {
-    text-align: center;
-    font-weight: 900;
-    font-size: 38px;
-    color: #3e2723;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 40px;
-    position: relative;
+.category-heading{
+    text-align:center;
+    font-weight:900;
+    font-size:34px;
+    color:var(--primary-brown);
+    margin-bottom:40px;
+    text-transform:uppercase;
 }
 
-/* Stylish underline */
-.category-heading::after {
-    content: "";
-    width: 90px;
-    height: 4px;
-    background: #ff9800;
-    display: block;
-    margin: 12px auto 0;
-    border-radius: 5px;
+.category-heading::after{
+    content:"";
+    width:80px;
+    height:4px;
+    background:var(--accent-orange);
+    display:block;
+    margin:12px auto 0;
+    border-radius:4px;
 }
 
-/* Category cards */
-.category-card {
-    text-align: center;
-    cursor: pointer;
-    transition: 0.3s;
+.category-card{
+    transition:0.3s;
 }
 
-.category-card img {
-    width: 120px;
-    transition: 0.3s;
+.category-card img{
+    width:110px;
+    transition:0.3s;
 }
 
-.category-card:hover img {
-    transform: scale(1.1);
+.category-card:hover img{
+    transform:scale(1.1);
 }
 
-.category-title {
-    margin-top: 12px;
-    font-weight: 700;
-    color: #3e2723;
-    font-size: 16px;
-}
-
-/* ===== MOBILE FIXES ===== */
-@media(max-width:768px){
-
-    .category-heading {
-        font-size: 22px;      /* Smaller heading */
-        letter-spacing: 1px;
-        margin-bottom: 25px;
-    }
-
-    .category-heading::after {
-        width: 50px;         /* Smaller underline */
-        height: 3px;
-        margin-top: 8px;
-    }
-
-    .category-card img {
-        width: 85px;
-    }
-
-    .category-title {
-        font-size: 13px;
-    }
+.category-title{
+    margin-top:10px;
+    font-weight:700;
+    color:var(--primary-brown);
 }
 
 /* =========================
-   SPECIAL ITEMS SECTION
+   PREMIUM SPECIAL CARD
    ========================= */
 
-.special-section {
-    padding: 50px 0;
-    background: #4f4c4c74;
+.special-card{
+    background:white;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
+    transition:all 0.3s ease;
+    text-align:center;
 }
 
-.special-heading {
-    text-align: center;
-    font-weight: 900;
-    font-size: 32px;
-    margin-bottom: 40px;
-    color: #3e2723;
-    text-transform: uppercase;
-    position: relative;
+.special-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 15px 35px rgba(0,0,0,0.15);
 }
 
-.special-heading::after {
-    content: "";
-    width: 70px;
-    height: 4px;
-    background: #ff9800;
-    display: block;
-    margin: 10px auto 0;
-    border-radius: 4px;
+.special-card img{
+    width:100%;
+    height:170px;
+    object-fit:cover;
 }
 
-/* 5 cards per row on desktop */
-.col-lg-2-4 {
-    width: 20%;
+.card-content{
+    padding:15px;
 }
 
-.special-card {
-    margin-bottom: 25px;
+.special-card h5{
+    font-weight:700;
+    color:var(--primary-brown);
+    margin-top:10px;
 }
 
-.card-box {
-    background: #3e2723;
-    border-radius: 10px;
-    padding: 15px;
-    text-align: center;
-    transition: 0.3s;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+.price{
+    color:var(--accent-orange);
+    font-weight:800;
+    font-size:18px;
+    margin-top:5px;
 }
 
-.card-box:hover {
-    transform: translateY(-6px);
+.stock-text{
+    font-size:13px;
+    font-weight:600;
+    margin-top:6px;
 }
 
-.card-box img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 8px;
+/* OUT OF STOCK RIBBON */
+.stock-ribbon{
+    position:absolute;
+    top:12px;
+    left:-30px;
+    background:#d32f2f;
+    color:white;
+    padding:5px 40px;
+    transform:rotate(-45deg);
+    font-size:11px;
+    font-weight:bold;
 }
 
-.card-box h5 {
-    margin-top: 12px;
-    font-weight: 700;
-    font-size: 16px;
+/* Disabled style */
+.out-stock{
+    filter:grayscale(100%);
+    opacity:0.7;
 }
+/* =========================
+   MOBILE RESPONSIVE
+   ========================= */
 
-.price {
-    color: #ff9800;
-    font-weight: 800;
-    margin-top: 5px;
-}
+@media(max-width:768px){
 
-/* ===== MOBILE 2 CARDS ===== */
-@media (max-width: 768px) {
+    .col-lg-2-4{ width:50%; }
 
-    .col-lg-2-4 {
-        width: 50%;
-    }
+    .card-box img{ height:120px; }
 
-    .card-box img {
-        height: 120px;
-    }
+    .special-heading{ font-size:22px; }
 
-    .special-heading {
-        font-size: 22px;
-    }
+    .category-heading{ font-size:22px; }
+
 }
 
 
-/* ===== CART BADGE ===== */
+/* =========================
+   FLOATING CART BUTTON
+   ========================= */
 
 .floating-btn{
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
+    position:fixed;
+    bottom:22px;
+    right:22px;
 
-    width: 90px;
-    height: 90px;
+    width:70px;
+    height:70px;
 
-    background: #ff5722;
-    color: white;
-    font-size: 44px;
+    background:var(--accent-orange);
+    color:white;
+    font-size:28px;
 
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-    text-decoration: none;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.35);
-    z-index: 9999;
-
-    transition: all 0.25s ease;
+    text-decoration:none;
+    box-shadow:0 10px 25px rgba(0,0,0,0.3);
+    z-index:9999;
+    transition:0.3s;
 }
 
-/* 🔴 Badge */
+.floating-btn:hover{
+    background:#ff5722;
+    transform:scale(1.1);
+}
 
 .cart-badge{
-    position: absolute;
-    top: 10px;
-    right: 10px;
-
-    background: red;
-    color: white;
-
-    font-size: 16px;
-    font-weight: bold;
-
-    min-width: 26px;
-    height: 26px;
-
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    box-shadow: 0 0 0 3px white;
+    position:absolute;
+    top:5px;
+    right:5px;
+    background:red;
+    color:white;
+    font-size:12px;
+    font-weight:bold;
+    min-width:18px;
+    height:18px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
-@media (max-width:768px){
-
-    .floating-btn{
-        width: 60px;
-        height: 60px;
-        font-size: 26px;
-        bottom: 16px;
-        right: 16px;
-    }
-
-    .cart-badge{
-        top: 4px;
-        right: 4px;
-        font-size: 12px;
-        min-width: 18px;
-        height: 18px;
-    }
-
-}
-
 
 </style>
 {% endblock %}
 
+
+
 {% block content %}
 
-<!-- Carousel -->
+<!-- ================= CAROUSEL ================= -->
 <div id="cafeCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="3500">
 
 <div class="carousel-inner">
-
 {% for item in carousels %}
 <div class="carousel-item {% if forloop.first %}active{% endif %}">
     <img src="{{ item.image.url }}" alt="{{ item.title }}">
@@ -337,7 +278,6 @@ body {
     <img src="{% static 'default.jpg' %}">
 </div>
 {% endfor %}
-
 </div>
 
 <button class="carousel-control-prev" type="button" data-bs-target="#cafeCarousel" data-bs-slide="prev">
@@ -350,32 +290,33 @@ body {
 
 </div>
 
-<!-- Categories -->
+
+<!-- ================= CATEGORIES ================= -->
 <section class="categories">
-    <h1 class="category-heading">Choose Your Category</h1>
+<h1 class="category-heading">Choose Your Category</h1>
 
 <div class="container">
 <div class="row text-center">
 
 <div class="col-4 category-card">
-    <a href="{% url 'juices' %}">
-        <img src="{% static 'juice.png' %}">
-    </a>
-    <div class="category-title">JUICES</div>
+<a href="{% url 'juices' %}">
+<img src="{% static 'juice.png' %}">
+</a>
+<div class="category-title">JUICES</div>
 </div>
 
 <div class="col-4 category-card">
-    <a href="{% url 'chai' %}">
-        <img src="{% static 'chai.png' %}">
-    </a>
-    <div class="category-title">CHAI & SNACKS</div>
+<a href="{% url 'chai' %}">
+<img src="{% static 'chai.png' %}">
+</a>
+<div class="category-title">CHAI & SNACKS</div>
 </div>
 
 <div class="col-4 category-card">
-    <a href="{% url 'fastfood' %}">
-        <img src="{% static 'fastfood.png' %}">
-    </a>
-    <div class="category-title">FAST FOODS</div>
+<a href="{% url 'fastfood' %}">
+<img src="{% static 'fastfood.png' %}">
+</a>
+<div class="category-title">FAST FOODS</div>
 </div>
 
 </div>
@@ -383,40 +324,92 @@ body {
 </section>
 
 
+<!-- ================= SPECIAL ITEMS ================= -->
+<!-- ================= SPECIAL ITEMS ================= -->
 
-<!-- =========================
-     SPECIAL ITEMS SECTION
-     ========================= -->
+
 
 <section class="special-section">
-    <div class="container">
-        <h2 class="special-heading">Special Items</h2>
+<div class="container">
 
-        <div class="row">
+<h2 class="special-heading">🔥 Special Items</h2>
 
-            {% for item in special_items %}
-            <div class="col-lg-2-4 col-md-4 col-6 special-card">
-                <div class="card-box">
-                    <img src="{{ item.image.url }}" alt="{{ item.name }}">
-                    <h5>{{ item.name }}</h5>
-                    <p class="price">₹ {{ item.price }}</p>
-                </div>
-            </div>
-            {% endfor %}
+<div class="row g-4">
 
+{% for item in special_items %}
+<div class="col-lg-3 col-md-4 col-6">
+
+<div class="special-card position-relative {% if item.quantity == 0 %}out-stock{% endif %}">
+
+    {% if item.quantity == 0 %}
+    <div class="stock-ribbon">STOCK OUT </div>
+    {% endif %}
+
+    {% if item.image %}
+        <img src="{{ item.image.url }}" alt="{{ item.name }}">
+    {% else %}
+        <img src="{% static 'default.jpg' %}" alt="No image">
+    {% endif %}
+
+    <div class="card-content">
+
+        <h5>{{ item.name }}</h5>
+        <div class="price">₹ {{ item.price }}</div>
+
+        {% if item.quantity > 0 %}
+        <div class="stock-text">
+            <i class="bi bi-check-circle-fill text-success"></i>
+            {{ item.quantity }} Available
         </div>
+        {% endif %}
+
+        {% if item.quantity > 0 %}
+        <form method="POST" action="{% url 'add_to_cart' item.id %}">
+            {% csrf_token %}
+
+            <div class="input-group input-group-sm my-2">
+                <span class="input-group-text">Qty</span>
+                <input type="number"
+                       name="quantity"
+                       value="1"
+                       min="1"
+                       max="{{ item.quantity }}"
+                       class="form-control"
+                       required>
+            </div>
+
+            <button type="submit" class="btn btn-dark btn-sm w-100 mb-2">
+                <i class="bi bi-cart-plus-fill"></i> Add to Cart
+            </button>
+        </form>
+
+        <a href="#" class="btn btn-warning btn-sm w-100">
+            <i class="bi bi-lightning-fill"></i> Order Now
+        </a>
+
+        {% else %}
+        <button class="btn btn-secondary btn-sm w-100" disabled>
+            <i class="bi bi-x-circle-fill"></i> STOCK OUT
+        </button>
+        {% endif %}
+
     </div>
+</div>
+
+</div>
+{% endfor %}
+
+</div>
+</div>
 </section>
-<!-- Floating Home Button -->
+
+
+
 {% if cart_count > 0 %}
 <a href="{% url 'cart' %}" class="floating-btn">
-
-    🪣
-    
-    <span class="cart-badge">{{ cart_count }}</span>
-
+🛒
+<span class="cart-badge">{{ cart_count }}</span>
 </a>
 {% endif %}
-
 
 {% endblock %}

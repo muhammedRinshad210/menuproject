@@ -27,53 +27,53 @@ def home(request):
     })
 
 
-
+from django.shortcuts import render, redirect
 from .models import Carousel, MenuItem, SpecialItem
 from .forms import CarouselForm, MenuItemForm, SpecialItemForm
-from django.shortcuts import render, redirect, get_object_or_404
 
 
 def dashboard(request):
+
     carousels = Carousel.objects.all().order_by('-id')
     products = MenuItem.objects.all().order_by('-id')
     special_items = SpecialItem.objects.all().order_by('-id')
 
+    # Default empty forms
     carousel_form = CarouselForm()
     product_form = MenuItemForm()
     special_form = SpecialItemForm()
 
-    # ---- Carousel submit ----
-    if request.method == "POST" and "carousel_submit" in request.POST:
-        carousel_form = CarouselForm(request.POST, request.FILES)
-        if carousel_form.is_valid():
-            carousel_form.save()
-            return redirect("dashboard")
+    if request.method == "POST":
 
-    # ---- Product submit ----
-    if request.method == "POST" and "product_submit" in request.POST:
-        product_form = MenuItemForm(request.POST, request.FILES)
-        if product_form.is_valid():
-            product_form.save()
-            return redirect("dashboard")
+        # ---- Carousel submit ----
+        if "carousel_submit" in request.POST:
+            carousel_form = CarouselForm(request.POST, request.FILES)
+            if carousel_form.is_valid():
+                carousel_form.save()
+                return redirect("dashboard")
 
-    # ---- Special Item submit ----
-    if request.method == "POST" and "special_submit" in request.POST:
-        special_form = SpecialItemForm(request.POST, request.FILES)
-        if special_form.is_valid():
-            special_form.save()
-            return redirect("dashboard")
+        # ---- Product submit ----
+        elif "product_submit" in request.POST:
+            product_form = MenuItemForm(request.POST, request.FILES)
+            if product_form.is_valid():
+                product_form.save()
+                return redirect("dashboard")
+
+        # ---- Special Item submit ----
+        elif "special_submit" in request.POST:
+            special_form = SpecialItemForm(request.POST, request.FILES)
+            if special_form.is_valid():
+                special_form.save()
+                return redirect("dashboard")
 
     return render(request, "menuapp/admin/dashboard.html", {
-        "form": carousel_form,
+        "carousel_form": carousel_form,   # ✅ fixed key name
         "product_form": product_form,
         "special_form": special_form,
         "carousels": carousels,
         "products": products,
         "special_items": special_items
     })
-
-
-
 
 
 
@@ -152,36 +152,58 @@ def delete_product(request, id):
 
 from django.shortcuts import get_object_or_404, redirect
 
+from django.shortcuts import get_object_or_404, redirect
+from django.db import transaction
+
 def add_to_cart(request, item_id):
     item = get_object_or_404(MenuItem, id=item_id)
 
+    # Get quantity from form (default 1)
+    try:
+        requested_qty = int(request.POST.get('quantity', 1))
+    except ValueError:
+        requested_qty = 1
+
+    # Prevent negative or zero quantity
+    if requested_qty <= 0:
+        return redirect('cart')
+
+    # Ensure session exists
     if not request.session.session_key:
         request.session.create()
 
     session_key = request.session.session_key
 
+    # If no stock available
     if item.quantity <= 0:
         return redirect('cart')
 
-    cart_item = Cart.objects.filter(item=item, session_key=session_key).first()
+    # Do not allow more than available stock
+    if requested_qty > item.quantity:
+        requested_qty = item.quantity
 
-    if cart_item:
-        cart_item.quantity += 1
-    else:
-        cart_item = Cart.objects.create(
+    with transaction.atomic():
+
+        cart_item = Cart.objects.filter(
             item=item,
-            quantity=1,
             session_key=session_key
-        )
+        ).first()
 
-    cart_item.save()
+        if cart_item:
+            cart_item.quantity += requested_qty
+            cart_item.save()
+        else:
+            cart_item = Cart.objects.create(
+                item=item,
+                quantity=requested_qty,
+                session_key=session_key
+            )
 
-    item.quantity -= 1
-    item.save()
+        # Reduce stock
+        item.quantity -= requested_qty
+        item.save()
 
     return redirect('cart')
-
-
 
 
 # Cart page
