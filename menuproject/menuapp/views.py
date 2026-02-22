@@ -18,7 +18,13 @@ def home(request):
     carousels = Carousel.objects.all().order_by('-id')
     special_items = SpecialItem.objects.all().order_by('-id')
 
-    cart_count = Cart.objects.count()
+    session_key = request.session.session_key
+
+    if not session_key:
+        request.session.create()
+        session_key = request.session.session_key
+
+    cart_count = Cart.objects.filter(session_key=session_key).count()
 
     return render(request, 'menuapp/index.html', {
         'carousels': carousels,

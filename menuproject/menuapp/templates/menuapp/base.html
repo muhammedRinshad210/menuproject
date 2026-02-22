@@ -128,11 +128,14 @@ body{
     <a class="navbar-brand" href="/">BYTE STUDIO</a>
 
     <div class="nav-icons">
+        <a href="{% url 'cart' %}" class="nav-icon">
+            <i class="bi bi-bucket"></i>
+            </a>
 
         <!-- Cart Icon -->
-        <a href="#" class="nav-icon" data-bs-toggle="modal" data-bs-target="#cartModal">
+        <!-- <a href="#" class="nav-icon" data-bs-toggle="modal" data-bs-target="#cartModal">
             <i class="bi bi-basket-fill"></i>
-        </a>
+        </a> -->
 
         <!-- Help Icon -->
         <a href="#" class="nav-icon">
@@ -162,12 +165,12 @@ body{
       <div class="modal-body">
 
         {% if cart_items %}
-            {% for item in cart_items %}
-                <div class="d-flex justify-content-between mb-2">
-                    <span>{{ item.product.name }}</span>
-                    <span>₹ {{ item.product.price }}</span>
-                </div>
-            {% endfor %}
+            {% for cart in cart_items %}
+    <div class="d-flex justify-content-between mb-2">
+        <span>{{ cart.item.name }}</span>
+        <span>₹ {{ cart.item.price }}</span>
+    </div>
+{% endfor %}
         {% else %}
             <p class="text-center">Cart is empty</p>
         {% endif %}
@@ -190,13 +193,17 @@ body{
 
 
 <!-- ===== Floating Cart Button ===== -->
-{% if cart_count > 0 %}
-<a href="#" class="floating-btn" data-bs-toggle="modal" data-bs-target="#cartModal">
-    <i class="bi bi-basket-fill"></i>
+{% if cart_count > 0 and request.resolver_match.url_name != 'cart' %}
+<a href="#" 
+   class="floating-btn" 
+   id="floatingCartBtn"
+   data-bs-toggle="modal" 
+   data-bs-target="#cartModal">
+    <i class="bi bi-bucket"></i>
     <span class="cart-badge">{{ cart_count }}</span>
 </a>
+<!-- bi bi-basket-fill -->
 {% endif %}
-
 
 <!-- ===== Footer ===== -->
 <footer class="footer">
@@ -205,6 +212,26 @@ body{
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
 
+    var cartModal = document.getElementById("cartModal");
+    var floatingBtn = document.getElementById("floatingCartBtn");
+
+    if (cartModal && floatingBtn) {
+
+        // Hide floating button when modal opens
+        cartModal.addEventListener("show.bs.modal", function () {
+            floatingBtn.style.display = "none";
+        });
+
+        // Show floating button when modal closes
+        cartModal.addEventListener("hidden.bs.modal", function () {
+            floatingBtn.style.display = "flex";
+        });
+
+    }
+});
+</script>
 </body>
 </html>
