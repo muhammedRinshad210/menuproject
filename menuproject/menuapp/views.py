@@ -284,3 +284,23 @@ def cart_count(request):
     return {
         'cart_count': count
     }
+
+
+from .models import  ChatMessage
+from django.shortcuts import render, redirect
+
+
+
+
+def chat_page(request):
+    if request.method == "POST":
+        name = request.POST.get('name')
+        message = request.POST.get('message')
+
+        ChatMessage.objects.create(
+            name=name,
+            message=message
+        )
+        return redirect('chat')
+
+    return render(request, 'menuapp/chat.html')

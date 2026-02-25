@@ -1,0 +1,95 @@
+{% extends "menuapp/base.html" %}
+{% block content %}
+
+<style>
+body{
+    background:#8fa9c1;
+}
+
+.feedback-wrapper{
+    min-height:90vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.feedback-card{
+    background:#e9edf2;
+    padding:50px 40px;
+    border-radius:18px;
+    width:500px;
+    text-align:center;
+    box-shadow:0 8px 25px rgba(0,0,0,0.15);
+}
+
+.feedback-card h1{
+    font-weight:700;
+    margin-bottom:25px;
+}
+
+.stars{
+    font-size:28px;
+    color:#c0c6cf;
+    margin:15px 0;
+    cursor:pointer;
+}
+
+.stars i:hover{
+    color:#ffb400;
+}
+
+textarea{
+    border-radius:15px;
+    padding:15px;
+    border:1px solid #ccc;
+    resize:none;
+}
+
+.feedback-btn{
+    background:#3f5c8a;
+    color:white;
+    border:none;
+    padding:12px 30px;
+    border-radius:25px;
+    font-weight:600;
+    margin-top:20px;
+    transition:0.3s;
+}
+
+.feedback-btn:hover{
+    background:#2e4770;
+}
+</style>
+
+<div class="feedback-wrapper">
+<div class="feedback-card">
+
+    <h1>We value your opinion.</h1>
+
+    <p>How would you rate your overall experience?</p>
+
+    <div class="stars">
+        <i class="bi bi-star"></i>
+        <i class="bi bi-star"></i>
+        <i class="bi bi-star"></i>
+        <i class="bi bi-star"></i>
+        <i class="bi bi-star"></i>
+    </div>
+
+    <p>Kindly take a moment to tell us what you think.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="name" class="form-control mb-3" placeholder="Your Name" required>
+
+        <textarea name="message" rows="4" class="form-control" placeholder="Write your feedback..." required></textarea>
+
+        <button type="submit" class="feedback-btn">
+            Share my feedback
+        </button>
+    </form>
+
+</div>
+</div>
+
+{% endblock %}

@@ -31,4 +31,8 @@ urlpatterns = [
     path('edit-special/<int:id>/', views.edit_special, name='edit_special'),
     path('delete-special/<int:id>/', views.delete_special, name='delete_special'),
 
+    
+    path('chat/', views.chat_page, name='chat'),
+    
+
 ]
