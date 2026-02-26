@@ -34,7 +34,7 @@ def home(request):
 
 
 from django.shortcuts import render, redirect
-from .models import Carousel, MenuItem, SpecialItem
+from .models import Carousel, MenuItem, SpecialItem, ChatMessage
 from .forms import CarouselForm, MenuItemForm, SpecialItemForm
 
 
@@ -43,6 +43,7 @@ def dashboard(request):
     carousels = Carousel.objects.all().order_by('-id')
     products = MenuItem.objects.all().order_by('-id')
     special_items = SpecialItem.objects.all().order_by('-id')
+    messages = ChatMessage.objects.all().order_by('-id')   # ⭐ NEW
 
     # Default empty forms
     carousel_form = CarouselForm()
@@ -51,21 +52,18 @@ def dashboard(request):
 
     if request.method == "POST":
 
-        # ---- Carousel submit ----
         if "carousel_submit" in request.POST:
             carousel_form = CarouselForm(request.POST, request.FILES)
             if carousel_form.is_valid():
                 carousel_form.save()
                 return redirect("dashboard")
 
-        # ---- Product submit ----
         elif "product_submit" in request.POST:
             product_form = MenuItemForm(request.POST, request.FILES)
             if product_form.is_valid():
                 product_form.save()
                 return redirect("dashboard")
 
-        # ---- Special Item submit ----
         elif "special_submit" in request.POST:
             special_form = SpecialItemForm(request.POST, request.FILES)
             if special_form.is_valid():
@@ -73,32 +71,46 @@ def dashboard(request):
                 return redirect("dashboard")
 
     return render(request, "menuapp/admin/dashboard.html", {
-        "carousel_form": carousel_form,   # ✅ fixed key name
+        "carousel_form": carousel_form,
         "product_form": product_form,
         "special_form": special_form,
         "carousels": carousels,
         "products": products,
-        "special_items": special_items
+        "special_items": special_items,
+        "messages": messages,   # ⭐ SEND TO TEMPLATE
     })
-
 
 
 # Edit Carousel
+from django.shortcuts import get_object_or_404, redirect, render
+
 def edit_carousel(request, id):
     carousel = get_object_or_404(Carousel, id=id)
-    form = CarouselForm(instance=carousel)
 
-    if request.method == 'POST':
-        form = CarouselForm(request.POST, request.FILES, instance=carousel)
-        if form.is_valid():
-            form.save()
-            return redirect('dashboard')
+    carousels = Carousel.objects.all().order_by('-id')
+    products = MenuItem.objects.all().order_by('-id')
+    special_items = SpecialItem.objects.all().order_by('-id')
+    messages = ChatMessage.objects.all().order_by('-id')
 
-    return render(request, 'menuapp/admin/dashboard.html', {
-        'form': form,
-        'carousels': Carousel.objects.all()
+    carousel_form = CarouselForm(instance=carousel)
+    product_form = MenuItemForm()
+    special_form = SpecialItemForm()
+
+    if request.method == "POST":
+        carousel_form = CarouselForm(request.POST, request.FILES, instance=carousel)
+        if carousel_form.is_valid():
+            carousel_form.save()
+            return redirect("dashboard")
+
+    return render(request, "menuapp/admin/dashboard.html", {
+        "carousel_form": carousel_form,   # IMPORTANT
+        "product_form": product_form,
+        "special_form": special_form,
+        "carousels": carousels,
+        "products": products,
+        "special_items": special_items,
+        "messages": messages,
     })
-
 
 # Delete Carousel
 def delete_carousel(request, id):
@@ -286,7 +298,7 @@ def cart_count(request):
     }
 
 
-from .models import  ChatMessage
+from .models import ChatMessage
 from django.shortcuts import render, redirect
 
 
@@ -296,11 +308,25 @@ def chat_page(request):
     if request.method == "POST":
         name = request.POST.get('name')
         message = request.POST.get('message')
+        rating = request.POST.get('rating')
+
+        if not rating:
+            rating = 0
 
         ChatMessage.objects.create(
             name=name,
-            message=message
+            message=message,
+            rating=int(rating)   # ⭐ VERY IMPORTANT
         )
+
         return redirect('chat')
 
     return render(request, 'menuapp/chat.html')
+
+
+
+
+
+
+def contact_page(request):
+    return render(request, "menuapp/contact.html")

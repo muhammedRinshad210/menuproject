@@ -138,7 +138,7 @@ body{
         </a> -->
 
         <!-- Help Icon -->
-<a href="/" class="nav-icon">
+<a href="{% url 'contact' %}" class="nav-icon">
     <i class="bi bi-question-circle-fill"></i>
 </a>
 
@@ -194,13 +194,15 @@ body{
 
 <!-- ===== Floating Cart Button ===== -->
 <!-- ===== Floating Cart Button ===== -->
-{% if cart_count > 0 and request.resolver_match.url_name != 'cart' %}
+{% if cart_count > 0 and request.resolver_match.url_name != 'chat' and request.resolver_match.url_name != 'contact' %}
+
 <a href="{% url 'cart' %}" 
    class="floating-btn" 
    id="floatingCartBtn">
     <i class="bi bi-bucket"></i>
     <span class="cart-badge">{{ cart_count }}</span>
 </a>
+
 {% endif %}
 
 <!-- ===== Footer ===== -->

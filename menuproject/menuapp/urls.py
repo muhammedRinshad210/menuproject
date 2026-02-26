@@ -33,6 +33,8 @@ urlpatterns = [
 
     
     path('chat/', views.chat_page, name='chat'),
+
+    path('contact',views.contact_page, name='contact')
     
 
 ]
