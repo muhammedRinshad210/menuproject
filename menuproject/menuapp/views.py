@@ -268,12 +268,32 @@ def checkout(request):
 
 
 def edit_special(request, id):
-    item = SpecialItem.objects.get(id=id)
-    form = SpecialItemForm(request.POST or None, request.FILES or None, instance=item)
-    if form.is_valid():
-        form.save()
-        return redirect('dashboard')
-    return render(request, 'dashboard.html', {'special_form': form})
+    item = get_object_or_404(SpecialItem, id=id)
+
+    carousels = Carousel.objects.all().order_by('-id')
+    products = MenuItem.objects.all().order_by('-id')
+    special_items = SpecialItem.objects.all().order_by('-id')
+    messages = ChatMessage.objects.all().order_by('-id')
+
+    special_form = SpecialItemForm(instance=item)
+    carousel_form = CarouselForm()
+    product_form = MenuItemForm()
+
+    if request.method == "POST":
+        special_form = SpecialItemForm(request.POST, request.FILES, instance=item)
+        if special_form.is_valid():
+            special_form.save()
+            return redirect("dashboard")
+
+    return render(request, "menuapp/admin/dashboard.html", {
+        "carousel_form": carousel_form,
+        "product_form": product_form,
+        "special_form": special_form,
+        "carousels": carousels,
+        "products": products,
+        "special_items": special_items,
+        "messages": messages,
+    })
 
 
 def delete_special(request, id):

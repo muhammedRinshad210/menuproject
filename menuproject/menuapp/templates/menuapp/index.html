@@ -407,13 +407,21 @@ Special Items
         {% endif %}
 
         <div class="mb-2">
-            {% if item.old_price %}
-                <span style="text-decoration:line-through; color:#777;">
-                    ₹ {{ item.old_price }}
-                </span>
-            {% endif %}
-            <span class="price-new">₹ {{ item.price }}</span>
-        </div>
+
+    {% if item.offer_price %}
+        <span style="text-decoration:line-through; color:#777;">
+            ₹ {{ item.price }}
+        </span>
+        <span class="price-new text-black fw-bold">
+            ₹ {{ item.offer_price }}
+        </span>
+    {% else %}
+        <span class="price-new fw-bold">
+            ₹ {{ item.price }}
+        </span>
+    {% endif %}
+
+</div>
 
         {% if item.quantity > 0 %}
         <form method="POST" action="{% url 'add_to_cart' item.id %}">

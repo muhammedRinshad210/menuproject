@@ -21,7 +21,7 @@ from .models import SpecialItem
 class SpecialItemForm(forms.ModelForm):
     class Meta:
         model = SpecialItem
-        fields = ['name', 'image', 'price', 'quantity', 'description']
+        fields = ['name', 'price', 'offer_price', 'quantity', 'image', 'description']
 
         widgets = {
             'name': forms.TextInput(attrs={

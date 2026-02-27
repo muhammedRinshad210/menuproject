@@ -151,22 +151,27 @@ h2{
 <form method="POST" enctype="multipart/form-data" class="row g-3">
     {% csrf_token %}
 
-    <div class="col-md-4">
+    <div class="col-md-3">
         <label class="form-label">Name</label>
         {{ special_form.name }}
     </div>
 
-    <div class="col-md-3">
-        <label class="form-label">Price</label>
+    <div class="col-md-2">
+        <label class="form-label">Original Price</label>
         {{ special_form.price }}
     </div>
 
-    <div class="col-md-3">
+    <div class="col-md-2">
+        <label class="form-label text-black">Offer Price</label>
+        {{ special_form.offer_price }}
+    </div>
+
+    <div class="col-md-2">
         <label class="form-label">Quantity</label>
         {{ special_form.quantity }}
     </div>
 
-    <div class="col-md-2">
+    <div class="col-md-3">
         <label class="form-label">Image</label>
         {{ special_form.image }}
     </div>
@@ -185,6 +190,7 @@ h2{
     <th>Image</th>
     <th>Name</th>
     <th>Price</th>
+    <th>Offer</th>
     <th>Available Stock</th>
     <th>Actions</th>
 </tr>
@@ -193,7 +199,22 @@ h2{
 <tr>
     <td><img src="{{ item.image.url }}" width="80"></td>
     <td>{{ item.name }}</td>
-    <td>₹ {{ item.price }}</td>
+
+    <td>
+        <span class="text-muted text-decoration-line-through">
+            ₹ {{ item.price }}
+        </span>
+    </td>
+
+    <td>
+        {% if item.offer_price %}
+            <span class="fw-bold text-black">
+                ₹ {{ item.offer_price }}
+            </span>
+        {% else %}
+            -
+        {% endif %}
+    </td>
 
     <td>
         {% if item.quantity > 0 %}

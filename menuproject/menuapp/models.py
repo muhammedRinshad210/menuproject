@@ -38,7 +38,8 @@ class SpecialItem(models.Model):
     name = models.CharField(max_length=200)
     image = models.ImageField(upload_to='special_items/')
     price = models.DecimalField(max_digits=8, decimal_places=2)
-    quantity = models.PositiveIntegerField(default=0)   # ✅ ADD THIS
+    offer_price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)  # ✅ NEW
+    quantity = models.PositiveIntegerField(default=0)
     description = models.TextField(blank=True)
 
     def __str__(self):
