@@ -90,3 +90,6 @@ class Table(models.Model):
 
     def __str__(self):
         return f"Table {self.table_number}"
+
+
+
