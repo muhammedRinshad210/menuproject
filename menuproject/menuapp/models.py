@@ -61,3 +61,32 @@ class ChatMessage(models.Model):
 
     def __str__(self):
         return self.name
+
+
+
+# qr section : 
+
+from django.db import models
+import qrcode
+from io import BytesIO
+from django.core.files import File
+
+class Table(models.Model):
+    table_number = models.IntegerField(unique=True)
+    is_active = models.BooleanField(default=True)
+    qr_code = models.ImageField(upload_to='table_qr/', blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        qr_data = f"http://127.0.0.1:8000/table/{self.table_number}/"
+
+        qr = qrcode.make(qr_data)
+        canvas = BytesIO()
+        qr.save(canvas, format='PNG')
+
+        file_name = f'table_{self.table_number}.png'
+        self.qr_code.save(file_name, File(canvas), save=False)
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Table {self.table_number}"

@@ -350,3 +350,53 @@ def chat_page(request):
 
 def contact_page(request):
     return render(request, "menuapp/contact.html")
+
+
+
+# qr section : 
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Table
+from django.contrib import messages
+
+# Dashboard Table List
+def dashboard_tables(request):
+    tables = Table.objects.all().order_by('table_number')
+    return render(request, "menuapp/admin/tables.html", {"tables": tables})
+
+
+# Toggle Active/Inactive
+def toggle_table(request, pk):
+    table = get_object_or_404(Table, pk=pk)
+    table.is_active = not table.is_active
+    table.save()
+    return redirect("dashboard_tables")
+
+
+# Create Tables Automatically (1–20)
+def create_tables(request):
+    for i in range(1, 11):
+        Table.objects.get_or_create(table_number=i)
+    return redirect("dashboard_tables")
+
+
+def table_view(request, table_number):
+    try:
+        table = Table.objects.get(table_number=table_number)
+
+        if not table.is_active:
+            return render(request, "menuapp/table_disabled.html")
+
+        request.session['table_number'] = table_number
+        return redirect("home")
+
+    except Table.DoesNotExist:
+        return render(request, "menuapp/table_disabled.html")
+    
+
+from django.shortcuts import get_object_or_404, redirect
+
+def delete_table(request, pk):
+    table = get_object_or_404(Table, pk=pk)
+    table.delete()
+    return redirect("dashboard_tables")

@@ -34,7 +34,13 @@ urlpatterns = [
     
     path('chat/', views.chat_page, name='chat'),
 
-    path('contact',views.contact_page, name='contact')
-    
+    path('contact',views.contact_page, name='contact'),
+
+          
+    path("dashboard/tables/", views.dashboard_tables, name="dashboard_tables"),
+    path("dashboard/tables/delete/<int:pk>/", views.delete_table, name="delete_table"),
+    path("dashboard/tables/toggle/<int:pk>/", views.toggle_table, name="toggle_table"),
+    path("dashboard/tables/create/", views.create_tables, name="create_tables"),
+    path("table/<int:table_number>/", views.table_view, name="table_view"),
 
 ]
