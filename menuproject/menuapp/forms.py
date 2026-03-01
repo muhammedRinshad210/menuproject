@@ -46,3 +46,28 @@ class SpecialItemForm(forms.ModelForm):
                 'placeholder': 'Enter description (optional)'
             }),
         }
+
+
+
+# offer 
+
+from django import forms
+from .models import Offer
+
+
+class OfferForm(forms.ModelForm):
+    class Meta:
+        model = Offer
+        fields = ['message', 'speed', 'is_active']
+        widgets = {
+            'message': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter offer message'
+            }),
+            'speed': forms.Select(attrs={
+                'class': 'form-control'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            })
+        }

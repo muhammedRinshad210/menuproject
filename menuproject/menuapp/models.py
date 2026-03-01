@@ -93,3 +93,18 @@ class Table(models.Model):
 
 
 
+# offer 
+
+class Offer(models.Model):
+    message = models.CharField(max_length=300)
+    speed = models.CharField(max_length=10, choices=[
+        ('slow','Slow'),
+        ('medium','Medium'),
+        ('fast','Fast')
+    ], default='medium')
+
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.message

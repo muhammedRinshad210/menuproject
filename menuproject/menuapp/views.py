@@ -17,9 +17,9 @@ from .models import Cart
 def home(request):
     carousels = Carousel.objects.all().order_by('-id')
     special_items = SpecialItem.objects.all().order_by('-id')
+    offer = Offer.objects.filter(is_active=True).first()
 
     session_key = request.session.session_key
-
     if not session_key:
         request.session.create()
         session_key = request.session.session_key
@@ -29,7 +29,8 @@ def home(request):
     return render(request, 'menuapp/index.html', {
         'carousels': carousels,
         'special_items': special_items,
-        'cart_count': cart_count
+        'cart_count': cart_count,
+        'offer': offer,   # 🔥 IMPORTANT
     })
 
 
@@ -38,21 +39,32 @@ from .models import Carousel, MenuItem, SpecialItem, ChatMessage
 from .forms import CarouselForm, MenuItemForm, SpecialItemForm
 
 
+from .models import Offer
+from .forms import OfferForm
+
 def dashboard(request):
 
     carousels = Carousel.objects.all().order_by('-id')
     products = MenuItem.objects.all().order_by('-id')
     special_items = SpecialItem.objects.all().order_by('-id')
-    messages = ChatMessage.objects.all().order_by('-id')   # ⭐ NEW
+    messages = ChatMessage.objects.all().order_by('-id')
+    offers = Offer.objects.all().order_by('-id')
 
-    # Default empty forms
     carousel_form = CarouselForm()
     product_form = MenuItemForm()
     special_form = SpecialItemForm()
+    offer_form = OfferForm()
 
     if request.method == "POST":
 
-        if "carousel_submit" in request.POST:
+        if "offer_submit" in request.POST:
+            offer_form = OfferForm(request.POST)
+            if offer_form.is_valid():
+                Offer.objects.update(is_active=False)
+                offer_form.save()
+                return redirect("dashboard")
+
+        elif "carousel_submit" in request.POST:
             carousel_form = CarouselForm(request.POST, request.FILES)
             if carousel_form.is_valid():
                 carousel_form.save()
@@ -74,10 +86,12 @@ def dashboard(request):
         "carousel_form": carousel_form,
         "product_form": product_form,
         "special_form": special_form,
+        "offer_form": offer_form,
         "carousels": carousels,
         "products": products,
         "special_items": special_items,
-        "messages": messages,   # ⭐ SEND TO TEMPLATE
+        "messages": messages,
+        "offers": offers,
     })
 
 
@@ -400,3 +414,52 @@ def delete_table(request, pk):
     table = get_object_or_404(Table, pk=pk)
     table.delete()
     return redirect("dashboard_tables")
+
+
+
+# offer 
+
+
+
+from django.shortcuts import redirect, get_object_or_404
+from .models import Offer
+
+def delete_offer(request, id):
+    offer = get_object_or_404(Offer, id=id)
+    offer.delete()
+    return redirect('dashboard')
+
+
+
+def edit_offer(request, id):
+    offer = get_object_or_404(Offer, id=id)
+
+    carousels = Carousel.objects.all().order_by('-id')
+    products = MenuItem.objects.all().order_by('-id')
+    special_items = SpecialItem.objects.all().order_by('-id')
+    messages = ChatMessage.objects.all().order_by('-id')
+    offers = Offer.objects.all().order_by('-id')
+
+    offer_form = OfferForm(instance=offer)
+    carousel_form = CarouselForm()
+    product_form = MenuItemForm()
+    special_form = SpecialItemForm()
+
+    if request.method == "POST":
+        offer_form = OfferForm(request.POST, instance=offer)
+        if offer_form.is_valid():
+            Offer.objects.update(is_active=False)
+            offer_form.save()
+            return redirect("dashboard")
+
+    return render(request, "menuapp/admin/dashboard.html", {
+        "carousel_form": carousel_form,
+        "product_form": product_form,
+        "special_form": special_form,
+        "offer_form": offer_form,
+        "carousels": carousels,
+        "products": products,
+        "special_items": special_items,
+        "messages": messages,
+        "offers": offers,
+    })

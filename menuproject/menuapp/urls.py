@@ -43,4 +43,8 @@ urlpatterns = [
     path("dashboard/tables/create/", views.create_tables, name="create_tables"),
     path("table/<int:table_number>/", views.table_view, name="table_view"),
 
+    # offer  
+    path('delete-offer/<int:id>/', views.delete_offer, name='delete_offer'),
+    path('edit-offer/<int:id>/', views.edit_offer, name='edit_offer'),
+
 ]

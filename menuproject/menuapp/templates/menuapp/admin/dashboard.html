@@ -11,6 +11,61 @@
     </a>
 </div>
 
+
+
+<!-- ================= OFFER SECTION ================= -->
+<div class="section-box">
+
+<h2><i class="bi bi-megaphone-fill text-danger"></i> Offer Banner</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ offer_form.as_p }}
+    <button type="submit" name="offer_submit" class="btn btn-danger">
+        Add / Update Offer
+    </button>
+</form>
+
+<hr>
+
+<table class="table table-bordered text-center">
+<tr>
+    <th>Message</th>
+    <th>Speed</th>
+    <th>Status</th>
+    <th>Actions</th>
+</tr>
+
+{% for offer in offers %}
+<tr>
+    <td>{{ offer.message }}</td>
+    <td>{{ offer.speed }}</td>
+    <td>
+        {% if offer.is_active %}
+            <span class="badge bg-success">Active</span>
+        {% else %}
+            <span class="badge bg-secondary">Inactive</span>
+        {% endif %}
+    </td>
+    <td>
+    <a href="{% url 'edit_offer' offer.id %}" 
+       class="btn btn-warning btn-sm">
+       <i class="bi bi-pencil-square"></i>
+    </a>
+
+    <a href="{% url 'delete_offer' offer.id %}" 
+       class="btn btn-danger btn-sm">
+       <i class="bi bi-trash"></i>
+    </a>
+</td>
+</tr>
+{% endfor %}
+</table>
+
+</div>
+
+
+
 <!-- ====== CAROUSEL SECTION ================= --> 
 <div class="section-box">
 
