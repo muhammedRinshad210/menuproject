@@ -46,6 +46,19 @@ class SpecialItem(models.Model):
         return self.name
     
 
+class SpecialCart(models.Model):
+    item = models.ForeignKey(SpecialItem, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    session_key = models.CharField(max_length=100, null=True, blank=True)
+
+    def total_price(self):
+        if self.item.offer_price:
+            return self.item.offer_price * self.quantity
+        return self.item.price * self.quantity
+
+
+    
+
 from django.db import models
 
 

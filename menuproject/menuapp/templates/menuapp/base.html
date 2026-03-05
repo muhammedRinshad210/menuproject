@@ -194,7 +194,7 @@ body{
 
 <!-- ===== Floating Cart Button ===== -->
 <!-- ===== Floating Cart Button ===== -->
-{% if cart_count > 0 and request.resolver_match.url_name != 'chat' and request.resolver_match.url_name != 'contact' %}
+{% if cart_count > 0 and request.resolver_match.url_name != 'chat' and request.resolver_match.url_name != 'contact' and request.resolver_match.url_name != 'cart' %}
 
 <a href="{% url 'cart' %}" 
    class="floating-btn" 

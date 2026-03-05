@@ -46,5 +46,10 @@ urlpatterns = [
     # offer  
     path('delete-offer/<int:id>/', views.delete_offer, name='delete_offer'),
     path('edit-offer/<int:id>/', views.edit_offer, name='edit_offer'),
+    path('add-special-to-cart/<int:item_id>/', views.add_special_to_cart, name='add_special_to_cart'),
+    path('increase-special/<int:cart_id>/', views.increase_special_cart, name='increase_special_cart'),
+    path('decrease-special/<int:cart_id>/', views.decrease_special_cart, name='decrease_special_cart'),
+    path('remove-special/<int:cart_id>/', views.remove_special_cart, name='remove_special_cart'),
+    
 
 ]

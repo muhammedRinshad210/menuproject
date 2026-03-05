@@ -24,7 +24,8 @@ def home(request):
         request.session.create()
         session_key = request.session.session_key
 
-    cart_count = Cart.objects.filter(session_key=session_key).count()
+    cart_count = Cart.objects.filter(session_key=session_key).count() + \
+             SpecialCart.objects.filter(session_key=session_key).count()
 
     return render(request, 'menuapp/index.html', {
         'carousels': carousels,
@@ -238,16 +239,103 @@ def add_to_cart(request, item_id):
     return redirect('cart')
 
 
+from .models import SpecialItem, SpecialCart
+from django.db import transaction
+
+
+def add_special_to_cart(request, item_id):
+    item = get_object_or_404(SpecialItem, id=item_id)
+
+    try:
+        requested_qty = int(request.POST.get('quantity', 1))
+    except ValueError:
+        requested_qty = 1
+
+    if requested_qty <= 0:
+        return redirect('cart')
+
+    if not request.session.session_key:
+        request.session.create()
+
+    session_key = request.session.session_key
+
+    if item.quantity <= 0:
+        return redirect('cart')
+
+    if requested_qty > item.quantity:
+        requested_qty = item.quantity
+
+    with transaction.atomic():
+        cart_item = SpecialCart.objects.filter(
+            item=item,
+            session_key=session_key
+        ).first()
+
+        if cart_item:
+            cart_item.quantity += requested_qty
+            cart_item.save()
+        else:
+            SpecialCart.objects.create(
+                item=item,
+                quantity=requested_qty,
+                session_key=session_key
+            )
+
+        item.quantity -= requested_qty
+        item.save()
+
+    return redirect('cart')
+
+
+
+
+def increase_special_cart(request, cart_id):
+    cart = get_object_or_404(SpecialCart, id=cart_id)
+
+    cart.quantity += 1
+    cart.save()
+
+    return redirect('cart')
+
+
+def decrease_special_cart(request, cart_id):
+    cart = get_object_or_404(SpecialCart, id=cart_id)
+
+    if cart.quantity > 1:
+        cart.quantity -= 1
+        cart.save()
+    else:
+        cart.delete()
+
+    return redirect('cart')
+
+
+
+
+def remove_special_cart(request, cart_id):
+    cart = get_object_or_404(SpecialCart, id=cart_id)
+    cart.delete()
+    return redirect('cart')
+
+
+
 # Cart page
 def cart_page(request):
     session_key = request.session.session_key
     cart_items = Cart.objects.filter(session_key=session_key)
-    total = sum(i.total_price() for i in cart_items)
+    special_cart_items = SpecialCart.objects.filter(session_key=session_key)
+    
+    total = sum(i.total_price() for i in cart_items) + \
+            sum(i.total_price() for i in special_cart_items)
 
     return render(request, "menuapp/cart.html", {
         "cart_items": cart_items,
+        "special_cart_items": special_cart_items,
         "total": total
     })
+
+
+
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Cart
 
