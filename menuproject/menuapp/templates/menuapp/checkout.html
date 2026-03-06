@@ -2,9 +2,48 @@
 
 {% block content %}
 
-<div class="container mt-5 text-center">
-    <h1>Checkout Page</h1>
-    <p>Your order will be placed here.</p>
+<div class="container mt-5">
+
+<h2 class="text-center mb-4">Order Bill</h2>
+
+<table class="table table-bordered text-center">
+
+<tr>
+<th>Item</th>
+<th>Price</th>
+<th>Qty</th>
+<th>Total</th>
+</tr>
+
+{% for item in order.items.all %}
+
+<tr>
+<td>{{ item.product_name }}</td>
+<td>₹ {{ item.price }}</td>
+<td>{{ item.quantity }}</td>
+<td>₹ {{ item.price|floatformat:2 }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+<div class="text-end mt-3">
+<h4>Total: ₹ {{ order.total_amount }}</h4>
+</div>
+
+<div class="text-center mt-4">
+
+<button onclick="window.print()" class="btn btn-dark">
+🧾 Print Bill
+</button>
+
+<a href="{% url 'home' %}" class="btn btn-primary">
+Continue Ordering
+</a>
+
+</div>
+
 </div>
 
 {% endblock %}
