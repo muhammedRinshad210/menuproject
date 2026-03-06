@@ -232,9 +232,7 @@ def add_to_cart(request, item_id):
                 session_key=session_key
             )
 
-        # Reduce stock
-        item.quantity -= requested_qty
-        item.save()
+        
 
     return redirect('cart')
 
@@ -244,6 +242,7 @@ from django.db import transaction
 
 
 def add_special_to_cart(request, item_id):
+
     item = get_object_or_404(SpecialItem, id=item_id)
 
     try:
@@ -265,24 +264,20 @@ def add_special_to_cart(request, item_id):
     if requested_qty > item.quantity:
         requested_qty = item.quantity
 
-    with transaction.atomic():
-        cart_item = SpecialCart.objects.filter(
+    cart_item = SpecialCart.objects.filter(
+        item=item,
+        session_key=session_key
+    ).first()
+
+    if cart_item:
+        cart_item.quantity += requested_qty
+        cart_item.save()
+    else:
+        SpecialCart.objects.create(
             item=item,
+            quantity=requested_qty,
             session_key=session_key
-        ).first()
-
-        if cart_item:
-            cart_item.quantity += requested_qty
-            cart_item.save()
-        else:
-            SpecialCart.objects.create(
-                item=item,
-                quantity=requested_qty,
-                session_key=session_key
-            )
-
-        item.quantity -= requested_qty
-        item.save()
+        )
 
     return redirect('cart')
 
@@ -290,10 +285,15 @@ def add_special_to_cart(request, item_id):
 
 
 def increase_special_cart(request, cart_id):
-    cart = get_object_or_404(SpecialCart, id=cart_id)
 
-    cart.quantity += 1
-    cart.save()
+    cart = get_object_or_404(SpecialCart, id=cart_id)
+    product = cart.item
+
+    max_allowed = product.quantity
+
+    if cart.quantity < max_allowed:
+        cart.quantity += 1
+        cart.save()
 
     return redirect('cart')
 
@@ -341,9 +341,17 @@ from .models import Cart
 
 
 def increase_cart(request, cart_id):
+
     cart = get_object_or_404(Cart, id=cart_id)
-    cart.quantity += 1
-    cart.save()
+    product = cart.item
+
+    # calculate max allowed
+    max_allowed = product.quantity
+
+    if cart.quantity < max_allowed:
+        cart.quantity += 1
+        cart.save()
+
     return redirect('cart')
 
 
@@ -365,8 +373,38 @@ def remove_cart(request, cart_id):
     return redirect('cart')
 
 
+from django.db import transaction
+
 def checkout(request):
-    return render(request, 'menuapp/checkout.html')
+
+    session_key = request.session.session_key
+
+    cart_items = Cart.objects.filter(session_key=session_key)
+    special_items = SpecialCart.objects.filter(session_key=session_key)
+
+    with transaction.atomic():
+
+        # Reduce stock for normal items
+        for cart in cart_items:
+            item = cart.item
+
+            if item.quantity >= cart.quantity:
+                item.quantity -= cart.quantity
+                item.save()
+
+        # Reduce stock for special items
+        for cart in special_items:
+            item = cart.item
+
+            if item.quantity >= cart.quantity:
+                item.quantity -= cart.quantity
+                item.save()
+
+        # Clear cart
+        cart_items.delete()
+        special_items.delete()
+
+    return render(request, "menuapp/checkout.html")
 
 
 def edit_special(request, id):
