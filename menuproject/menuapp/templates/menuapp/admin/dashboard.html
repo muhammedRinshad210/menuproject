@@ -333,4 +333,80 @@
 </table>
 </div>
 </div>
+
+
+
+
+===========================
+SALES REPORT
+===========================
+
+
+<div class="section-box">
+
+<h2><i class="bi bi-bar-chart"></i> Sales Report</h2>
+
+<div class="row text-center">
+
+<div class="col-md-3">
+<div class="card p-3">
+<h5>Today Sales</h5>
+<h3>₹ {{ today_sales }}</h3>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card p-3">
+<h5>This Month</h5>
+<h3>₹ {{ month_sales }}</h3>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card p-3">
+<h5>This Year</h5>
+<h3>₹ {{ year_sales }}</h3>
+</div>
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="section-box">
+
+<h2><i class="bi bi-receipt"></i> Orders</h2>
+
+<table class="table table-bordered">
+
+<tr>
+<th>Order ID</th>
+<th>Total</th>
+<th>Date</th>
+<th>Bill</th>
+</tr>
+
+{% for order in orders %}
+
+<tr>
+<td>#{{ order.id }}</td>
+<td>₹{{ order.total_amount }}</td>
+<td>{{ order.created_at }}</td>
+
+<td>
+<a href="{% url 'admin_bill' order.id %}" 
+class="btn btn-sm btn-dark">
+View Bill
+</a>
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
 {% endblock %}

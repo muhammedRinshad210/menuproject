@@ -5,7 +5,7 @@ def index(request):
     return render(request, "menuapp/index.html")
 
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Carousel
+from .models import Carousel, Order, OrderItem
 from .forms import CarouselForm
 
 
@@ -36,26 +36,47 @@ def home(request):
 
 
 from django.shortcuts import render, redirect
-from .models import Carousel, MenuItem, SpecialItem, ChatMessage
-from .forms import CarouselForm, MenuItemForm, SpecialItemForm
+from django.db.models import Sum
+from django.utils.timezone import now
+from datetime import date
 
+from .models import Carousel, MenuItem, SpecialItem, ChatMessage, Offer, Order
+from .forms import CarouselForm, MenuItemForm, SpecialItemForm, OfferForm
 
-from .models import Offer
-from .forms import OfferForm
 
 def dashboard(request):
 
+    # ================= SALES REPORT =================
+    today_sales = Order.objects.filter(
+        created_at__date=date.today()
+    ).aggregate(total=Sum('total_amount'))['total'] or 0
+
+    month_sales = Order.objects.filter(
+        created_at__month=now().month,
+        created_at__year=now().year
+    ).aggregate(total=Sum('total_amount'))['total'] or 0
+
+    year_sales = Order.objects.filter(
+        created_at__year=now().year
+    ).aggregate(total=Sum('total_amount'))['total'] or 0
+
+    # Orders list
+    orders = Order.objects.all().order_by('-created_at')
+
+    # ================= EXISTING DATA =================
     carousels = Carousel.objects.all().order_by('-id')
     products = MenuItem.objects.all().order_by('-id')
     special_items = SpecialItem.objects.all().order_by('-id')
     messages = ChatMessage.objects.all().order_by('-id')
     offers = Offer.objects.all().order_by('-id')
 
+    # Forms
     carousel_form = CarouselForm()
     product_form = MenuItemForm()
     special_form = SpecialItemForm()
     offer_form = OfferForm()
 
+    # ================= FORM SUBMISSIONS =================
     if request.method == "POST":
 
         if "offer_submit" in request.POST:
@@ -83,16 +104,24 @@ def dashboard(request):
                 special_form.save()
                 return redirect("dashboard")
 
+    # ================= RENDER DASHBOARD =================
     return render(request, "menuapp/admin/dashboard.html", {
         "carousel_form": carousel_form,
         "product_form": product_form,
         "special_form": special_form,
         "offer_form": offer_form,
+
         "carousels": carousels,
         "products": products,
         "special_items": special_items,
         "messages": messages,
         "offers": offers,
+
+        # NEW SALES DATA
+        "today_sales": today_sales,
+        "month_sales": month_sales,
+        "year_sales": year_sales,
+        "orders": orders,
     })
 
 
@@ -373,7 +402,12 @@ def remove_cart(request, cart_id):
     return redirect('cart')
 
 
+
+
 from django.db import transaction
+from django.db.models import Sum
+from django.utils.timezone import now
+from datetime import date
 
 def checkout(request):
 
@@ -382,30 +416,61 @@ def checkout(request):
     cart_items = Cart.objects.filter(session_key=session_key)
     special_items = SpecialCart.objects.filter(session_key=session_key)
 
+    subtotal = 0
+
     with transaction.atomic():
 
-        # Reduce stock for normal items
+        # Create order
+        order = Order.objects.create(total_amount=0)
+
+        # Normal items
         for cart in cart_items:
             item = cart.item
 
             if item.quantity >= cart.quantity:
+
                 item.quantity -= cart.quantity
                 item.save()
 
-        # Reduce stock for special items
+                price = item.offer_price if item.offer_price else item.price
+                subtotal += price * cart.quantity
+
+                OrderItem.objects.create(
+                    order=order,
+                    product_name=item.name,
+                    price=price,
+                    quantity=cart.quantity
+                )
+
+        # Special items
         for cart in special_items:
             item = cart.item
 
             if item.quantity >= cart.quantity:
+
                 item.quantity -= cart.quantity
                 item.save()
+
+                price = item.offer_price if item.offer_price else item.price
+                subtotal += price * cart.quantity
+
+                OrderItem.objects.create(
+                    order=order,
+                    product_name=item.name,
+                    price=price,
+                    quantity=cart.quantity
+                )
+
+        order.total_amount = subtotal
+        order.save()
 
         # Clear cart
         cart_items.delete()
         special_items.delete()
 
-    return render(request, "menuapp/checkout.html")
-
+    return render(request, "menuapp/checkout.html", {
+        "order": order
+    })
 
 def edit_special(request, id):
     item = get_object_or_404(SpecialItem, id=id)
@@ -588,4 +653,14 @@ def edit_offer(request, id):
         "special_items": special_items,
         "messages": messages,
         "offers": offers,
+    })
+
+
+
+def admin_bill(request, order_id):
+
+    order = get_object_or_404(Order, id=order_id)
+
+    return render(request, "menuapp/admin/admin_bill.html", {
+        "order": order
     })

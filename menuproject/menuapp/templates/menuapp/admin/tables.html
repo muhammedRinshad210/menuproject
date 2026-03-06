@@ -17,7 +17,13 @@
 
                     <h5>Table {{ table.table_number }}</h5>
 
-                    <img src="{{ table.qr_code.url }}" width="150">
+                    <img src="{{ table.qr_code.url }}" width="150" class="mb-2">
+
+                    <div class="d-grid gap-2">
+                        <a href="{{ table.qr_code.url }}" download class="btn btn-sm btn-success">
+                            Download QR
+                        </a>
+                    </div>
 
                     <p class="mt-2">
                         Status:

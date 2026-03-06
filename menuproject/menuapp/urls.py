@@ -50,6 +50,7 @@ urlpatterns = [
     path('increase-special/<int:cart_id>/', views.increase_special_cart, name='increase_special_cart'),
     path('decrease-special/<int:cart_id>/', views.decrease_special_cart, name='decrease_special_cart'),
     path('remove-special/<int:cart_id>/', views.remove_special_cart, name='remove_special_cart'),
+    path("admin-bill/<int:order_id>/", views.admin_bill, name="admin_bill"),
     
 
 ]

@@ -1,0 +1,27 @@
+<h2>Order #{{ order.id }}</h2>
+
+<table border="1" cellpadding="10">
+
+<tr>
+<th>Item</th>
+<th>Price</th>
+<th>Qty</th>
+<th>Total</th>
+</tr>
+
+{% for item in order.items.all %}
+
+<tr>
+<td>{{ item.product_name }}</td>
+<td>₹ {{ item.price }}</td>
+<td>{{ item.quantity }}</td>
+<td>₹ {{ item.price|floatformat:2 }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+<h3>Total: ₹ {{ order.total_amount }}</h3>
+
+<button onclick="window.print()">Print Bill</button>
