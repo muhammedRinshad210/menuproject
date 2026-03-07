@@ -469,9 +469,14 @@
                 <span>₹{{ total }}</span>
             </div>
 
-            <a href="{% url 'checkout' %}" class="btn-checkout">
-                <i class="bi bi-lightning-fill me-1"></i>Proceed to Checkout
+            <a href="{% url 'checkout' %}" class="btn-checkout"
+                onclick="return confirm('Are you sure to checkout the product?')">Proceed to Checkout
             </a>
+
+
+
+
+
 
             <a href="/" class="btn-continue">
                 ← Continue Shopping
@@ -490,6 +495,8 @@
     <h3>Your bucket is empty!</h3>
     <p>Looks like you haven't added anything yet.<br>Explore our menu and add items you love.</p>
     <a href="/" class="btn-shop">Start Ordering</a>
+
+  
 </div>
 
 {% endif %}
