@@ -1,0 +1,56 @@
+{% extends "menuapp/admin/dashboard_base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container mt-4">
+    <h2>Table Management</h2>
+
+    <a href="{% url 'create_tables' %}" class="btn btn-primary mb-3">
+        Generate 1-10 Tables
+    </a>
+
+    <div class="row">
+        {% for table in tables %}
+        <div class="col-md-3">
+            <div class="card mb-4 shadow">
+                <div class="card-body text-center">
+
+                    <h5>Table {{ table.table_number }}</h5>
+
+                    <img src="{{ table.qr_code.url }}" width="150" class="mb-2">
+
+                    <div class="d-grid gap-2">
+                        <a href="{{ table.qr_code.url }}" download class="btn btn-sm btn-success">
+                            Download QR
+                        </a>
+                    </div>
+
+                    <p class="mt-2">
+                        Status:
+                        {% if table.is_active %}
+                            <span class="text-success">Active</span>
+                        {% else %}
+                            <span class="text-danger">Disabled</span>
+                        {% endif %}
+                    </p>
+
+                    <a href="{% url 'toggle_table' table.pk %}"
+                       class="btn btn-sm btn-warning">
+                        Toggle
+                    </a>
+                    <a href="{% url 'delete_table' table.pk %}"
+
+                    class="btn btn-sm btn-danger"
+                    onclick="return confirm('Are you sure to delete this table?')">
+                    Delete
+                    </a>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}

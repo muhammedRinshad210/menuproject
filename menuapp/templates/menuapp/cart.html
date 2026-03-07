@@ -10,7 +10,7 @@
 .cart-banner {
     height: 30vh;
     min-height: 160px;
-    background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+    background: linear-gradient(rgb(122, 115, 101)),
                 url("{% static 'default.jpg' %}") center/cover no-repeat;
     display: flex;
     align-items: center;
@@ -328,7 +328,7 @@
 <div class="cart-section">
 <div class="container">
 
-{% if cart_items %}
+{% if cart_items or special_cart_items %}
 
 <div class="row">
 
@@ -336,9 +336,10 @@
     <div class="col-lg-8">
 
         <h5 class="fw-bold mb-3" style="color:#3e2723;">
-            {{ cart_items|length }} Item{% if cart_items|length != 1 %}s{% endif %} in your bucket
+            {{ cart_items|length|add:special_cart_items|length }} Item{% if cart_items|length != 1 %}s{% endif %} in your bucket
         </h5>
 
+        <!-- ── Regular Menu Items ── -->
         {% for cart in cart_items %}
         <div class="cart-card">
             <div class="d-flex align-items-center gap-3 p-3">
@@ -350,8 +351,12 @@
                 <div class="flex-grow-1">
                     <div class="cart-item-name">{{ cart.item.name }}</div>
                     <div class="cart-item-price">
-                        <span class="old">₹{{ cart.item.price }}</span>
-                        ₹{{ cart.item.offer_price }}
+                        {% if cart.item.offer_price %}
+                            <span class="old">₹{{ cart.item.price }}</span>
+                            ₹{{ cart.item.offer_price }}
+                        {% else %}
+                            ₹{{ cart.item.price }}
+                        {% endif %}
                     </div>
 
                     <!-- Qty + Remove -->
@@ -374,7 +379,55 @@
                 <div class="text-end d-none d-sm-block">
                     <div style="font-size:13px;color:#999;">Subtotal</div>
                     <div style="font-weight:800;color:#3e2723;font-size:17px;">
-                        ₹{{ cart.subtotal }}
+                        ₹{{ cart.total_price }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- ── Special Items ── -->
+        {% for cart in special_cart_items %}
+        <div class="cart-card">
+            <div class="d-flex align-items-center gap-3 p-3">
+
+                <!-- Image -->
+                <img src="{{ cart.item.image.url }}" alt="{{ cart.item.name }}">
+
+                <!-- Details -->
+                <div class="flex-grow-1">
+                    <div class="cart-item-name">{{ cart.item.name }}</div>
+                    <div class="cart-item-price">
+                        {% if cart.item.offer_price %}
+                            <span class="old">₹{{ cart.item.price }}</span>
+                            ₹{{ cart.item.offer_price }}
+                        {% else %}
+                            ₹{{ cart.item.price }}
+                        {% endif %}
+                    </div>
+
+                    <!-- Qty + Remove -->
+                    <div class="d-flex align-items-center gap-3 flex-wrap">
+
+                        <div class="qty-control">
+                            <a href="{% url 'decrease_special_cart' cart.id %}" class="qty-btn">−</a>
+                            <span class="qty-value">{{ cart.quantity }}</span>
+                            <a href="{% url 'increase_special_cart' cart.id %}" class="qty-btn">+</a>
+                        </div>
+
+                        <a href="{% url 'remove_special_cart' cart.id %}" class="btn-remove">
+                            <i class="bi bi-trash me-1"></i>Remove
+                        </a>
+
+                    </div>
+                </div>
+
+                <!-- Line Total -->
+                <div class="text-end d-none d-sm-block">
+                    <div style="font-size:13px;color:#999;">Subtotal</div>
+                    <div style="font-weight:800;color:#3e2723;font-size:17px;">
+                        ₹{{ cart.total_price }}
                     </div>
                 </div>
 
@@ -391,7 +444,7 @@
             <h4><i class="bi bi-receipt me-2"></i>Order Summary</h4>
 
             <div class="summary-row">
-                <span>Items ({{ cart_items|length }})</span>
+                <span>Items ({{ cart_items|length|add:special_cart_items|length }})</span>
                 <span>₹{{ subtotal }}</span>
             </div>
 
@@ -416,9 +469,14 @@
                 <span>₹{{ total }}</span>
             </div>
 
-            <a href="{% url 'checkout' %}" class="btn-checkout">
-                <i class="bi bi-lightning-fill me-1"></i>Proceed to Checkout
+            <a href="{% url 'checkout' %}" class="btn-checkout"
+                onclick="return confirm('Are you sure to checkout the product?')">Proceed to Checkout
             </a>
+
+
+
+
+
 
             <a href="/" class="btn-continue">
                 ← Continue Shopping
@@ -437,6 +495,8 @@
     <h3>Your bucket is empty!</h3>
     <p>Looks like you haven't added anything yet.<br>Explore our menu and add items you love.</p>
     <a href="/" class="btn-shop">Start Ordering</a>
+
+  
 </div>
 
 {% endif %}

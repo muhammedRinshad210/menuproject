@@ -5,326 +5,341 @@
 <style>
 
 /* =========================
-   MODERN CAROUSEL
-   ========================= */
+   GLOBAL THEME COLORS
+========================= */
 
-#cafeCarousel {
-    height: 400px;
-    position: relative;
+:root{
+    --primary-brown:#3e2723;
+    --secondary-brown:#5d4037;
+    --accent-orange:#ff9800;
+    --light-bg:#fff8f3;
+}
+
+body{
+    margin:0;
+    padding:0;
+    background:var(--light-bg);
+}
+
+.carousel{
+    margin-bottom:0 !important;
+}
+
+/* =========================
+   CAROUSEL
+========================= */
+
+#cafeCarousel{
+    height:400px;
+    position:relative;
 }
 
 #cafeCarousel .carousel-inner,
-#cafeCarousel .carousel-item {
-    height: 100%;
+#cafeCarousel .carousel-item{
+    height:100%;
 }
 
-#cafeCarousel .carousel-item {
-    transition: opacity 1s ease-in-out;
+#cafeCarousel .carousel-item img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
 }
 
-#cafeCarousel .carousel-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
+#cafeCarousel .carousel-item::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.45);
+    z-index:1;
 }
 
-/* Dark overlay */
-#cafeCarousel .carousel-item::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45);
-    z-index: 1;
+#cafeCarousel .carousel-caption{
+    position:absolute;
+    z-index:2;
+    top:50%;
+    transform:translateY(-50%);
+    text-align:center;
 }
 
-/* Center caption */
-#cafeCarousel .carousel-caption {
-    position: absolute;
-    z-index: 2;
-    top: 50%;
-    transform: translateY(-50%);
-    bottom: auto;
-    text-align: center;
+#cafeCarousel .carousel-caption h2{
+    font-size:36px;
+    font-weight:900;
+    color:white;
 }
 
-#cafeCarousel .carousel-caption h2 {
-    font-size: 36px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-shadow: 2px 2px 10px rgba(0,0,0,0.9);
-}
-
-
-
-/* ===== SMALL MOBILE CAROUSEL ===== */
-@media (max-width: 768px) {
-
-    #cafeCarousel {
-        height: 25vh;
-    }
-
-    #cafeCarousel .carousel-caption h2 {
-        font-size: 20px;
-    }
-}
-
-/* Remove extra space */
-.carousel {
-    margin-bottom: 0 !important;
-}
-
-body {
-    margin: 0;
-    padding: 0;
-}
-
-/* =========================
-   CATEGORIES SECTION
-   ========================= */
-
-.categories {
-    background: #fff3e0;
-    padding: 40px 0;
-}
-
-.category-heading {
-    text-align: center;
-    font-weight: 900;
-    font-size: 38px;
-    color: #3e2723;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 40px;
-    position: relative;
-}
-
-/* Stylish underline */
-.category-heading::after {
-    content: "";
-    width: 90px;
-    height: 4px;
-    background: #ff9800;
-    display: block;
-    margin: 12px auto 0;
-    border-radius: 5px;
-}
-
-/* Category cards */
-.category-card {
-    text-align: center;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.category-card img {
-    width: 120px;
-    transition: 0.3s;
-}
-
-.category-card:hover img {
-    transform: scale(1.1);
-}
-
-.category-title {
-    margin-top: 12px;
-    font-weight: 700;
-    color: #3e2723;
-    font-size: 16px;
-}
-
-/* ===== MOBILE FIXES ===== */
 @media(max-width:768px){
-
-    .category-heading {
-        font-size: 22px;      /* Smaller heading */
-        letter-spacing: 1px;
-        margin-bottom: 25px;
-    }
-
-    .category-heading::after {
-        width: 50px;         /* Smaller underline */
-        height: 3px;
-        margin-top: 8px;
-    }
-
-    .category-card img {
-        width: 85px;
-    }
-
-    .category-title {
-        font-size: 13px;
-    }
+    #cafeCarousel{ height:25vh; }
+    #cafeCarousel .carousel-caption h2{ font-size:20px; }
 }
 
 /* =========================
-   SPECIAL ITEMS SECTION
-   ========================= */
+   CATEGORIES
+========================= */
 
-.special-section {
-    padding: 50px 0;
-    background: #4f4c4c74;
+.categories{
+    background:white;
+    padding:50px 0;
 }
 
-.special-heading {
-    text-align: center;
-    font-weight: 900;
-    font-size: 32px;
-    margin-bottom: 40px;
-    color: #3e2723;
-    text-transform: uppercase;
-    position: relative;
+.category-heading{
+    text-align:center;
+    font-weight:900;
+    font-size:34px;
+    color:var(--primary-brown);
+    margin-bottom:40px;
 }
 
-.special-heading::after {
-    content: "";
-    width: 70px;
-    height: 4px;
-    background: #ff9800;
-    display: block;
-    margin: 10px auto 0;
-    border-radius: 4px;
+.category-card img{
+    width:110px;
+    transition:0.3s;
 }
 
-/* 5 cards per row on desktop */
-.col-lg-2-4 {
-    width: 20%;
+.category-card:hover img{
+    transform:scale(1.1);
 }
 
-.special-card {
-    margin-bottom: 25px;
+.category-title{
+    margin-top:10px;
+    font-weight:700;
+    color:var(--primary-brown);
 }
 
-.card-box {
-    background: #3e2723;
-    border-radius: 10px;
-    padding: 15px;
-    text-align: center;
-    transition: 0.3s;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+/* =========================
+   SPECIAL ITEM CARD
+========================= */
+
+/* ===============================
+   PREMIUM CARD DESIGN
+=================================*/
+
+.card{
+    position:relative;
+    border:none;
+    border-radius:14px;
+    background:#fff3e0;
+    box-shadow:0 6px 15px rgba(0,0,0,0.08);
+    transition:all 0.3s ease;
+    height:100%;
+    overflow:hidden;
 }
 
-.card-box:hover {
-    transform: translateY(-6px);
+
+/* Hover Lift */
+.card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 15px 30px rgba(0,0,0,0.15);
 }
 
-.card-box img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 8px;
+/* Image Styling */
+.card img{
+    height:180px;
+    width:100%;
+    object-fit:contain;
+    background:#fff;
+    padding:12px;
+    transition:0.4s ease;
 }
 
-.card-box h5 {
-    margin-top: 12px;
-    font-weight: 700;
-    font-size: 16px;
+/* Smooth Zoom */
+.card:hover img{
+    transform:scale(1.08);
 }
 
-.price {
-    color: #ff9800;
-    font-weight: 800;
-    margin-top: 5px;
+/* Title */
+.card h6{
+    font-weight:700;
+    color:#3e2723;
+    margin-top:8px;
 }
 
-/* ===== MOBILE 2 CARDS ===== */
-@media (max-width: 768px) {
+/* Price */
+.price-new{
+    color:#3e2723;
+    font-weight:700;
+    font-size:16px;
+}
 
-    .col-lg-2-4 {
-        width: 50%;
+/* ===============================
+   BADGES & STOCK
+=================================*/
+
+/* Discount Badge */
+.discount-badge{
+    position:absolute;
+    top:10px;
+    left:10px;
+    background:#d32f2f;
+    color:#fff;
+    padding:4px 10px;
+    font-size:12px;
+    font-weight:bold;
+    border-radius:20px;
+    z-index:2;
+}
+
+/* Out of Stock Overlay */
+.out-overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.6);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+    font-size:18px;
+    z-index:3;
+    text-transform:uppercase;
+}
+
+/* Low Stock Warning */
+.low-stock{
+    color:#ff5722;
+    font-weight:700;
+    font-size:13px;
+    margin-bottom:17px;
+}
+
+/* ===============================
+   QUANTITY BUTTONS
+=================================*/
+
+.qty-btn{
+    background:#6d4c41;
+    color:white;
+    border:none;
+    width:30px;
+    height:30px;
+    border-radius:4px;
+    transition:0.2s;
+}
+
+.qty-btn:hover{
+    background:#4e342e;
+}
+
+/* Disabled Button */
+.qty-btn:disabled{
+    background:#ccc;
+    cursor:not-allowed;
+}
+
+
+
+
+/* ===============================
+   BUY BUTTON
+=================================*/
+
+.btn-buy{
+    background:#3e2723;
+    color:white;
+    border-radius:6px;
+    transition:0.3s;
+}
+
+.btn-buy:hover{
+    background:#1b0f0d;
+    color:white;
+}
+
+/* ===============================
+   ANIMATION
+=================================*/
+
+.card{
+    animation:fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp{
+    from{
+        opacity:0;
+        transform:translateY(15px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* ===============================
+   RESPONSIVE LAYOUT
+=================================*/
+
+/* 5 cards desktop */
+@media (min-width: 992px){
+    .col-lg-2-4{
+        width:20%;
+        flex:0 0 20%;
+    }
+}
+
+/* 2 cards mobile */
+@media (max-width: 576px){
+    .col-custom{
+        width:50%;
+        flex:0 0 50%;
     }
 
-    .card-box img {
-        height: 120px;
-    }
-
-    .special-heading {
-        font-size: 22px;
+    .card img{
+        height:140px;
     }
 }
 
-
-/* ===== CART BADGE ===== */
-
-.floating-btn{
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-
-    width: 90px;
-    height: 90px;
-
-    background: #ff5722;
-    color: white;
-    font-size: 44px;
-
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    text-decoration: none;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.35);
-    z-index: 9999;
-
-    transition: all 0.25s ease;
+.offer-bar{
+    background: linear-gradient(90deg,#550505,#8b0000);
+    color:white;
+    overflow:hidden;
+    white-space:nowrap;
+    padding:8px 0;
+    position:relative;
+    font-weight:600;
 }
 
-/* 🔴 Badge */
-
-.cart-badge{
-    position: absolute;
-    top: 10px;
-    right: 10px;
-
-    background: red;
-    color: white;
-
-    font-size: 16px;
-    font-weight: bold;
-
-    min-width: 26px;
-    height: 26px;
-
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    box-shadow: 0 0 0 3px white;
+.offer-text{
+    display:inline-block;
+    padding-left:100%;
+    animation: scroll linear infinite;
 }
-@media (max-width:768px){
 
-    .floating-btn{
-        width: 60px;
-        height: 60px;
-        font-size: 26px;
-        bottom: 16px;
-        right: 16px;
-    }
+.slow { animation-duration: 25s; }
+.medium { animation-duration: 15s; }
+.fast { animation-duration: 8s; }
 
-    .cart-badge{
-        top: 4px;
-        right: 4px;
-        font-size: 12px;
-        min-width: 18px;
-        height: 18px;
-    }
-
+@keyframes scroll{
+    0%{ transform: translateX(0); }
+    100%{ transform: translateX(-100%); }
 }
 
 
+
+.close-offer{
+    position:absolute;
+    right:15px;
+    top:5px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.offer-bar{
+    background: linear-gradient(90deg,#ff512f,#dd2476);
+    color:white;
+    font-weight:bold;
+    letter-spacing:1px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
 </style>
 {% endblock %}
 
+
+
 {% block content %}
 
-<!-- Carousel -->
-<div id="cafeCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="3500">
+<!-- ================= CAROUSEL ================= -->
+
+<div id="cafeCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
 
 <div class="carousel-inner">
-
 {% for item in carousels %}
 <div class="carousel-item {% if forloop.first %}active{% endif %}">
     <img src="{{ item.image.url }}" alt="{{ item.title }}">
@@ -332,12 +347,7 @@ body {
         <h2>{{ item.title }}</h2>
     </div>
 </div>
-{% empty %}
-<div class="carousel-item active">
-    <img src="{% static 'default.jpg' %}">
-</div>
 {% endfor %}
-
 </div>
 
 <button class="carousel-control-prev" type="button" data-bs-target="#cafeCarousel" data-bs-slide="prev">
@@ -350,73 +360,198 @@ body {
 
 </div>
 
-<!-- Categories -->
-<section class="categories">
-    <h1 class="category-heading">Choose Your Category</h1>
 
+<!-- ================= CATEGORIES ================= -->
+
+<section class="categories">
 <div class="container">
+<h1 class="category-heading">Choose Your Category</h1>
+
 <div class="row text-center">
 
 <div class="col-4 category-card">
-    <a href="{% url 'juices' %}">
-        <img src="{% static 'juice.png' %}">
-    </a>
-    <div class="category-title">JUICES</div>
-</div>
-
-<div class="col-4 category-card">
-    <a href="{% url 'chai' %}">
-        <img src="{% static 'chai.png' %}">
-    </a>
-    <div class="category-title">CHAI & SNACKS</div>
-</div>
-
-<div class="col-4 category-card">
-    <a href="{% url 'fastfood' %}">
-        <img src="{% static 'fastfood.png' %}">
-    </a>
-    <div class="category-title">FAST FOODS</div>
-</div>
-
-</div>
-</div>
-</section>
-
-
-
-<!-- =========================
-     SPECIAL ITEMS SECTION
-     ========================= -->
-
-<section class="special-section">
-    <div class="container">
-        <h2 class="special-heading">Special Items</h2>
-
-        <div class="row">
-
-            {% for item in special_items %}
-            <div class="col-lg-2-4 col-md-4 col-6 special-card">
-                <div class="card-box">
-                    <img src="{{ item.image.url }}" alt="{{ item.name }}">
-                    <h5>{{ item.name }}</h5>
-                    <p class="price">₹ {{ item.price }}</p>
-                </div>
-            </div>
-            {% endfor %}
-
-        </div>
-    </div>
-</section>
-<!-- Floating Home Button -->
-{% if cart_count > 0 %}
-<a href="{% url 'cart' %}" class="floating-btn">
-
-    🪣
-    
-    <span class="cart-badge">{{ cart_count }}</span>
-
+<a href="{% url 'juices' %}">
+<img src="{% static 'juice.png' %}">
 </a>
+<div class="category-title">JUICES</div>
+</div>
+
+<div class="col-4 category-card">
+<a href="{% url 'chai' %}">
+<img src="{% static 'chai.png' %}">
+</a>
+<div class="category-title">CHAI & SNACKS</div>
+</div>
+
+<div class="col-4 category-card">
+<a href="{% url 'fastfood' %}">
+<img src="{% static 'fastfood.png' %}">
+</a>
+<div class="category-title">FAST FOODS</div>
+</div>
+
+</div>
+</div>
+</section>
+
+<!-- offer section   -->
+
+
+{% if offer and offer.is_active %}
+<div class="offer-bar" id="offerBar">
+    <span class="offer-text {{ offer.speed }}">
+        🔥 {{ offer.message }}
+    </span>
+
+    <span class="close-offer" onclick="closeOffer()">✖</span>
+</div>
 {% endif %}
 
 
+
+
+<!-- ================= SPECIAL ITEMS ================= -->
+
+<section class="py-5">
+<div class="container">
+
+<h2 class="text-center mb-4" style="color:#3e2723; font-weight:900;">
+Special Items
+</h2>
+
+<div class="row">
+
+{% for item in special_items %}
+<div class="col-lg-2-4 col-md-4 col-custom mb-4 d-flex">
+
+<div class="card text-center w-100">
+
+    {% if item.discount %}
+        <div class="discount-badge">
+            {{ item.discount }}% OFF
+        </div>
+    {% endif %}
+
+    {% if item.quantity == 0 %}
+        <div class="out-overlay">
+             STOCK OUT 
+        </div>
+    {% endif %}
+
+    {% if item.image %}
+        <img src="{{ item.image.url }}" alt="{{ item.name }}">
+    {% else %}
+        <img src="{% static 'default.jpg' %}">
+    {% endif %}
+
+    <div class="p-3">
+
+        <h6>{{ item.name }}</h6>
+
+        {% if item.quantity > 0 %}
+
+            {% if item.quantity <= 2 %}
+                <div class="low-stock">
+                    Only {{ item.quantity }} left!
+                </div>
+            {% else %}
+                <p class="text-success small">
+                    {{ item.quantity }} available
+                </p>
+            {% endif %}
+
+        {% endif %}
+
+        <div class="mb-2">
+
+    {% if item.offer_price %}
+        <span style="text-decoration:line-through; color:#777;">
+            ₹ {{ item.price }}
+        </span>
+        <span class="price-new text-black fw-bold">
+            ₹ {{ item.offer_price }}
+        </span>
+    {% else %}
+        <span class="price-new fw-bold">
+            ₹ {{ item.price }}
+        </span>
+    {% endif %}
+
+</div>
+
+        {% if item.quantity > 0 %}
+        <form method="POST" action="{% url 'add_special_to_cart' item.id %}">
+        {% csrf_token %}
+
+        <div class="d-flex justify-content-center align-items-center gap-2 mb-2">
+
+            <button type="button"
+                    class="qty-btn"
+                    onclick="decreaseQty(this)">-</button>
+
+            <input type="number"
+                   name="quantity"
+                   value="1"
+                   min="1"
+                   max="{{ item.quantity }}"
+                   class="form-control text-center qty-input"
+                   style="width:60px;">
+
+            <button type="button"
+                    class="qty-btn plus-btn"
+                    data-max="{{ item.quantity }}"
+                    onclick="increaseQty(this)">+</button>
+
+        </div>
+
+        <button type="submit" class="btn btn-sm btn-buy w-100">
+            Add to Cart
+        </button>
+
+        </form>
+        {% endif %}
+
+    </div>
+</div>
+
+</div>
+{% endfor %}
+
+</div>
+</div>
+</section>
+
+
+
+<script>
+function increaseQty(btn){
+    let input = btn.parentElement.querySelector(".qty-input");
+    let max = parseInt(btn.getAttribute("data-max"));
+    let value = parseInt(input.value);
+
+    if(value < max){
+        input.value = value + 1;
+    }
+
+    if(parseInt(input.value) >= max){
+        btn.disabled = true;
+    }
+}
+
+function decreaseQty(btn){
+    let input = btn.parentElement.querySelector(".qty-input");
+    let plusBtn = btn.parentElement.querySelector(".plus-btn");
+    let value = parseInt(input.value);
+
+    if(value > 1){
+        input.value = value - 1;
+        plusBtn.disabled = false;
+    }
+}
+</script>
+<script>
+function closeOffer(){
+    document.getElementById("offerBar").style.display="none";
+}
+</script>
 {% endblock %}

@@ -1,0 +1,117 @@
+{% extends "menuapp/base.html" %}
+{% block content %}
+
+<style>
+body{
+    background:rgb(122, 115, 101);
+}
+
+.feedback-wrapper{
+    min-height:90vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.feedback-card{
+    background:rgb(245, 230, 202);
+    padding:50px 40px;
+    border-radius:18px;
+    width:500px;
+    text-align:center;
+    box-shadow:0 8px 25px rgba(0,0,0,0.15);
+}
+
+.feedback-card h1{
+    font-weight:700;
+    margin-bottom:25px;
+}
+
+.stars{
+    font-size:28px;
+    color:#c0c6cf;
+    margin:15px 0;
+    cursor:pointer;
+}
+
+.stars i:hover{
+    color:#ffb400;
+}
+
+textarea{
+    border-radius:15px;
+    padding:15px;
+    border:1px solid #ccc;
+    resize:none;
+}
+
+.feedback-btn{
+    background:#1f1514;
+    color:white;
+    border:none;
+    padding:12px 30px;
+    border-radius:25px;
+    font-weight:600;
+    margin-top:20px;
+    transition:0.3s;
+}
+
+.feedback-btn:hover{
+    background:#443736;
+}
+</style>
+
+<div class="feedback-wrapper">
+<div class="feedback-card">
+
+    <h1>We value your opinion.</h1>
+
+    <p>How would you rate your overall experience?</p>
+<form method="POST">
+    {% csrf_token %}
+
+    <div class="stars text-center">
+        <i class="bi bi-star" data-value="1"></i>
+        <i class="bi bi-star" data-value="2"></i>
+        <i class="bi bi-star" data-value="3"></i>
+        <i class="bi bi-star" data-value="4"></i>
+        <i class="bi bi-star" data-value="5"></i>
+    </div>
+
+    <!-- ⭐ MUST BE INSIDE FORM -->
+    <input type="hidden" name="rating" id="rating-value">
+
+    <input type="text" name="name" class="form-control mb-3" placeholder="Your Name" required>
+
+    <textarea name="message" rows="4" class="form-control" placeholder="Write your feedback..." required></textarea>
+
+    <button type="submit" class="feedback-btn">
+        Share my feedback
+    </button>
+</form>
+
+</div>
+</div>
+<script>
+const stars = document.querySelectorAll(".stars i");
+const ratingInput = document.getElementById("rating-value");
+
+stars.forEach(star => {
+    star.addEventListener("click", function() {
+        let value = this.getAttribute("data-value");
+        ratingInput.value = value;
+
+        stars.forEach(s => {
+            s.classList.remove("bi-star-fill");
+            s.classList.add("bi-star");
+        });
+
+        for (let i = 0; i < value; i++) {
+            stars[i].classList.remove("bi-star");
+            stars[i].classList.add("bi-star-fill");
+            stars[i].style.color = "#ffb400";
+        }
+    });
+});
+</script>
+{% endblock %}

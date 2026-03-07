@@ -1,193 +1,450 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Dashboard</title>
+{% extends "menuapp/admin/dashboard_base.html" %}
+{% load static %}
+{% block content %}
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<div class="section-box text-center">
+    <h2>QR Code Table Management</h2>
 
-    <style>
-        body{
-            background:#f5f5f5;
-        }
-        .section-box{
-            background:white;
-            padding:20px;
-            border-radius:8px;
-            box-shadow:0 3px 8px rgba(0,0,0,0.1);
-            margin-bottom:30px;
-        }
-    </style>
-</head>
+    <a href="{% url 'dashboard_tables' %}" 
+       class="btn btn-dark">
+       Manage Tables
+    </a>
+</div>
 
-<body class="p-4">
 
-<div class="container">
 
-<!-- ================= CAROUSEL SECTION ================= -->
-<div class="section-box">
+<!-- ================= OFFER SECTION ================= -->
+<div class="section-box" id="offer">
 
-<h2>Add / Edit Carousel</h2>
+<h2><i class="bi bi-megaphone-fill text-danger"></i> Offer Banner</h2>
 
-<form method="POST" enctype="multipart/form-data">
+<form method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" name="carousel_submit" class="btn btn-dark">
-    Save
-</button>
-
+    {{ offer_form.as_p }}
+    <button type="submit" name="offer_submit" class="btn btn-danger">
+        Add / Update Offer
+    </button>
 </form>
 
 <hr>
 
-<h4>Existing Carousels</h4>
+<div class="table-responsive">
 
-<table class="table table-bordered">
+
+<table class="table table-bordered text-center">
+<tr>
+    <th>Message</th>
+    <th>Speed</th>
+    <th>Status</th>
+    <th>Actions</th>
+</tr>
+
+{% for offer in offers %}
+<tr>
+    <td>{{ offer.message }}</td>
+    <td>{{ offer.speed }}</td>
+    <td>
+        {% if offer.is_active %}
+            <span class="badge bg-success">Active</span>
+        {% else %}
+            <span class="badge bg-secondary">Inactive</span>
+        {% endif %}
+    </td>
+    <td>
+    <a href="{% url 'edit_offer' offer.id %}#offer" 
+       class="btn btn-warning btn-sm">
+       <i class="bi bi-pencil-square"></i>
+    </a>
+
+    <a href="{% url 'delete_offer' offer.id %}#offer" 
+       class="btn btn-danger btn-sm">
+       <i class="bi bi-trash"></i>
+    </a>
+</td>
+</tr>
+{% endfor %}
+</table>
+
+</div>
+
+</div>
+
+
+
+<!-- ====== CAROUSEL SECTION ================= --> 
+<div class="section-box" id="carousel">
+
+<h2><i class="bi bi-images"></i> Carousel</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ carousel_form.as_p }}
+    <button type="submit" name="carousel_submit" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Add Carousel
+    </button>
+</form>
+
+<hr>
+
+<div class="table-responsive">
+
+
+<table class="table table-bordered align-middle text-center">
 <tr>
     <th>Image</th>
     <th>Title</th>
-    <th>Quantity</th>
+    <th>Actions</th>
 </tr>
 
 {% for item in carousels %}
 <tr>
-    <td><img src="{{ item.image.url }}" width="120"></td>
+    <td>
+        <img src="{{ item.image.url }}" width="120">
+    </td>
     <td>{{ item.title }}</td>
     <td>
-        <a href="{% url 'edit_carousel' item.id %}" class="btn btn-warning btn-sm">Edit</a>
-        <a href="{% url 'delete_carousel' item.id %}"
-           class="btn btn-danger btn-sm"
-           onclick="return confirm('Delete this item?')">
-           Delete
-        </a>
-    </td>
+    <a href="{% url 'edit_carousel' item.id %}#carousel"
+       class="btn btn-warning btn-sm">
+       <i class="bi bi-pencil-square"></i>
+    </a>
+
+    <a href="{% url 'delete_carousel' item.id %}#carousel"
+       class="btn btn-danger btn-sm"
+       onclick="return confirm('Delete this carousel?')">
+       <i class="bi bi-trash"></i>
+    </a>
+</td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="3" class="text-muted">No carousel added.</td>
 </tr>
 {% endfor %}
-
 </table>
+
 </div>
 
+</div>
 
 <!-- ================= PRODUCT SECTION ================= -->
+<div class="section-box" id="product">
 
-
-
-<div class="section-box">
-
-<h2>Add Product</h2>
+<h2><i class="bi bi-box-seam"></i> Products</h2>
 
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ product_form.as_p }}
     <button type="submit" name="product_submit" class="btn btn-success">
-        Add Product
+        <i class="bi bi-plus-circle"></i> Add Product
     </button>
 </form>
 
 <hr>
 
-<h4>Products List</h4>
+<div class="table-responsive">
 
-<table class="table table-bordered">
+
+<table class="table table-bordered align-middle">
 <tr>
     <th>Image</th>
     <th>Name</th>
     <th>Category</th>
     <th>Price</th>
-    <th>Actions</th>
     <th>Stock</th>
+    <th>Actions</th>
 </tr>
 
 {% for product in products %}
 <tr>
-    <td>
-        <img src="{{ product.image.url }}" width="100">
-    </td>
+    <td><img src="{{ product.image.url }}" width="80"></td>
     <td>{{ product.name }}</td>
     <td>{{ product.category }}</td>
     <td>₹ {{ product.price }}</td>
-    <td>{{ product.quantity }}</td>
-
 
     <td>
-        <a href="{% url 'edit_product' product.id %}"
-           class="btn btn-warning btn-sm">Edit</a>
+        {% if product.quantity > 0 %}
+            <span class="badge bg-success">{{ product.quantity }}</span>
+        {% else %}
+            <span class="badge bg-danger">Out</span>
+        {% endif %}
+    </td>
 
-        <a href="{% url 'delete_product' product.id %}"
+    <td>
+        <a href="{% url 'edit_product' product.id %}#product" class="btn btn-warning btn-sm">
+            <i class="bi bi-pencil-square"></i>
+        </a>
+
+        <a href="{% url 'delete_product' product.id %}#product"
            class="btn btn-danger btn-sm"
            onclick="return confirm('Delete this product?')">
-           Delete
+           <i class="bi bi-trash"></i>
         </a>
     </td>
 </tr>
-{% empty %}
-<tr>
-    <td colspan="5" class="text-center">No products added yet.</td>
-</tr>
 {% endfor %}
-
 </table>
-
+</div>
 </div>
 
-</div>
+<!-- ================= SPECIAL ITEMS ================= -->
+<div class="section-box" id="special">
+<h2><i class="bi bi-star-fill text-warning"></i> Special Items</h2>
 
-<!-- ================= SPECIAL ITEMS SECTION ================= -->
-
-<div class="section-box">
-
-<h2>Add Special Item</h2>
-
-<form method="POST" enctype="multipart/form-data">
+<form method="POST" enctype="multipart/form-data" class="row g-3">
     {% csrf_token %}
-    {{ special_form.as_p }}
-    <button type="submit" name="special_submit" class="btn btn-primary">
-        Add Special Item
-    </button>
+
+    <div class="col-md-3">
+        <label class="form-label">Name</label>
+        {{ special_form.name }}
+    </div>
+
+    <div class="col-md-2">
+        <label class="form-label">Original Price</label>
+        {{ special_form.price }}
+    </div>
+
+    <div class="col-md-2">
+        <label class="form-label text-black">Offer Price</label>
+        {{ special_form.offer_price }}
+    </div>
+
+    <div class="col-md-2">
+        <label class="form-label">Quantity</label>
+        {{ special_form.quantity }}
+    </div>
+
+    <div class="col-md-3">
+        <label class="form-label">Image</label>
+        {{ special_form.image }}
+    </div>
+
+    <div class="col-12">
+        <button type="submit" name="special_submit" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Add Special Item
+        </button>
+    </div>
 </form>
 
 <hr>
 
-<h4>Special Items List</h4>
+<div class="table-responsive">
 
-<table class="table table-bordered">
+<table class="table table-bordered align-middle text-center">
 <tr>
     <th>Image</th>
     <th>Name</th>
     <th>Price</th>
-    <th>Description</th>
+    <th>Offer</th>
+    <th>Available Stock</th>
     <th>Actions</th>
 </tr>
 
 {% for item in special_items %}
 <tr>
-    <td>
-        <img src="{{ item.image.url }}" width="100">
-    </td>
+    <td><img src="{{ item.image.url }}" width="80"></td>
     <td>{{ item.name }}</td>
-    <td>₹ {{ item.price }}</td>
-    <td>{{ item.description|truncatewords:10 }}</td>
-    <td>
-        <a href="{% url 'edit_special' item.id %}"
-           class="btn btn-warning btn-sm">Edit</a>
 
-        <a href="{% url 'delete_special' item.id %}"
+    <td>
+        <span class="text-muted text-decoration-line-through">
+            ₹ {{ item.price }}
+        </span>
+    </td>
+
+    <td>
+        {% if item.offer_price %}
+            <span class="fw-bold text-black">
+                ₹ {{ item.offer_price }}
+            </span>
+        {% else %}
+            -
+        {% endif %}
+    </td>
+
+    <td>
+        {% if item.quantity > 0 %}
+            <span class="badge bg-success">{{ item.quantity }} Available</span>
+        {% else %}
+            <span class="badge bg-danger">Out of Stock</span>
+        {% endif %}
+    </td>
+
+    <td>
+        <a href="{% url 'edit_special' item.id %}#special"
+            class="btn btn-warning btn-sm">
+            <i class="bi bi-pencil-square">
+            </i>
+        </a>
+
+        <a href="{% url 'delete_special' item.id %}#special"
            class="btn btn-danger btn-sm"
            onclick="return confirm('Delete this special item?')">
-           Delete
+           <i class="bi bi-trash"></i>
         </a>
     </td>
-</tr>
-{% empty %}
-<tr>
-    <td colspan="5" class="text-center">No special items added yet.</td>
 </tr>
 {% endfor %}
 
 </table>
+</div>
+
+</div>
 
 </div>
 
 
+<!-- ================= USER FEEDBACK ================= -->
+<div class="section-box">
 
-</body>
-</html>
+<h2><i class="bi bi-chat-dots-fill text-primary"></i> User Feedback</h2>
+
+<div class="table-responsive">
+
+<table class="table table-bordered align-middle">
+<tr>
+    <th>Name</th>
+    <th>Message</th>
+    <th>Rating</th>
+    <th>Date</th>
+</tr>
+
+{% for msg in messages %}
+<tr>
+    <td>{{ msg.name }}</td>
+    <td>{{ msg.message }}</td>
+
+    <td>
+    {% for i in "12345"|make_list %}
+        {% if forloop.counter <= msg.rating|add:0 %}
+            <i class="bi bi-star-fill text-warning"></i>
+        {% else %}
+            <i class="bi bi-star text-muted"></i>
+        {% endif %}
+    {% endfor %}
+</td>
+
+    <td>{{ msg.created_at|date:"d M Y H:i" }}</td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="4" class="text-center text-muted">
+        No feedback yet.
+    </td>
+</tr>
+{% endfor %}
+</table>
+</div>
+</div>
+
+
+
+
+<!-- ===========================
+SALES REPORT
+=========================== -->
+
+
+<div class="section-box">
+
+<h2><i class="bi bi-bar-chart"></i> Sales Report</h2>
+
+<!-- Month Download -->
+<form method="GET" action="{% url 'report_month' %}" class="row g-2 mb-4">
+
+<div class="col-md-3">
+<input type="month" name="month" class="form-control">
+</div>
+
+<div class="col-md-2">
+<button type="submit" class="btn btn-dark">
+Download Monthly Report
+</button>
+</div>
+
+</form>
+
+<div class="row text-center g-3">
+
+<!-- Today -->
+<div class="col-md-4">
+<div class="card p-3">
+<h6>Today Sales</h6>
+<h4>₹ {{ today_sales }}</h4>
+
+<a href="{% url 'report_today' %}" 
+class="btn btn-sm btn-dark mt-2">
+Print
+</a>
+
+</div>
+</div>
+
+<!-- Monthly -->
+<div class="col-md-4">
+<div class="card p-3">
+<h6>This Month</h6>
+<h4>₹ {{ month_sales }}</h4>
+
+<a href="{% url 'report_month' %}" 
+class="btn btn-sm btn-dark mt-2">
+Print
+</a>
+
+</div>
+</div>
+
+<!-- Yearly -->
+<div class="col-md-4">
+<div class="card p-3">
+<h6>This Year</h6>
+<h4>₹ {{ year_sales }}</h4>
+
+<a href="{% url 'report_year' %}" 
+class="btn btn-sm btn-dark mt-2">
+Print
+</a>
+
+</div>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="section-box">
+
+<h2><i class="bi bi-receipt"></i> Orders</h2>
+<div class="table-responsive">
+
+<table class="table table-bordered">
+
+<tr>
+<th>Order ID</th>
+<th>Total</th>
+<th>Date</th>
+<th>Bill</th>
+</tr>
+
+{% for order in orders %}
+
+<tr>
+<td>#{{ order.id }}</td>
+<td>₹{{ order.total_amount }}</td>
+<td>{{ order.created_at }}</td>
+
+<td>
+<a href="{% url 'admin_bill' order.id %}" 
+class="btn btn-sm btn-dark">
+View Bill
+</a>
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+</div>
+</div>
+</div>
+{% endblock %}
