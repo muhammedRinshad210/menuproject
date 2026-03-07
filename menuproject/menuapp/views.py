@@ -664,3 +664,68 @@ def admin_bill(request, order_id):
     return render(request, "menuapp/admin/admin_bill.html", {
         "order": order
     })
+
+
+from django.utils.timezone import now
+from django.shortcuts import render
+from .models import Order
+
+def report_today(request):
+    today = now().date()
+    orders = Order.objects.filter(created_at__date=today)
+    total = sum(o.total_amount for o in orders)
+
+    return render(request, "menuapp/admin/report_today.html", {
+        "orders": orders,
+        "total": total,
+        "title": "Today Sales Report"
+    })
+
+
+from django.shortcuts import render
+from .models import Order
+
+from django.utils.timezone import now
+from django.shortcuts import render
+from .models import Order
+
+
+def report_month(request):
+
+    selected_month = request.GET.get("month")
+
+    if selected_month:
+        year, month = selected_month.split("-")
+    else:
+        today = now()
+        year = today.year
+        month = today.month
+
+    orders = Order.objects.filter(
+        created_at__year=year,
+        created_at__month=month
+    )
+
+    total = sum(order.total_amount for order in orders)
+
+    return render(request, "menuapp/admin/report_today.html", {
+        "orders": orders,
+        "total": total,
+        "title": "Monthly Sales Report"
+    })
+
+
+def report_year(request):
+    today = now()
+
+    orders = Order.objects.filter(
+        created_at__year=today.year
+    )
+
+    total = sum(o.total_amount for o in orders)
+
+    return render(request, "menuapp/admin/report_today.html", {
+        "orders": orders,
+        "total": total,
+        "title": "Yearly Sales Report"
+    })

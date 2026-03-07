@@ -14,7 +14,7 @@
 
 
 <!-- ================= OFFER SECTION ================= -->
-<div class="section-box">
+<div class="section-box" id="offer">
 
 <h2><i class="bi bi-megaphone-fill text-danger"></i> Offer Banner</h2>
 
@@ -51,12 +51,12 @@
         {% endif %}
     </td>
     <td>
-    <a href="{% url 'edit_offer' offer.id %}" 
+    <a href="{% url 'edit_offer' offer.id %}#offer" 
        class="btn btn-warning btn-sm">
        <i class="bi bi-pencil-square"></i>
     </a>
 
-    <a href="{% url 'delete_offer' offer.id %}" 
+    <a href="{% url 'delete_offer' offer.id %}#offer" 
        class="btn btn-danger btn-sm">
        <i class="bi bi-trash"></i>
     </a>
@@ -72,7 +72,7 @@
 
 
 <!-- ====== CAROUSEL SECTION ================= --> 
-<div class="section-box">
+<div class="section-box" id="carousel">
 
 <h2><i class="bi bi-images"></i> Carousel</h2>
 
@@ -103,12 +103,12 @@
     </td>
     <td>{{ item.title }}</td>
     <td>
-    <a href="{% url 'edit_carousel' item.id %}"
+    <a href="{% url 'edit_carousel' item.id %}#carousel"
        class="btn btn-warning btn-sm">
        <i class="bi bi-pencil-square"></i>
     </a>
 
-    <a href="{% url 'delete_carousel' item.id %}"
+    <a href="{% url 'delete_carousel' item.id %}#carousel"
        class="btn btn-danger btn-sm"
        onclick="return confirm('Delete this carousel?')">
        <i class="bi bi-trash"></i>
@@ -127,7 +127,7 @@
 </div>
 
 <!-- ================= PRODUCT SECTION ================= -->
-<div class="section-box">
+<div class="section-box" id="product">
 
 <h2><i class="bi bi-box-seam"></i> Products</h2>
 
@@ -170,11 +170,11 @@
     </td>
 
     <td>
-        <a href="{% url 'edit_product' product.id %}" class="btn btn-warning btn-sm">
+        <a href="{% url 'edit_product' product.id %}#product" class="btn btn-warning btn-sm">
             <i class="bi bi-pencil-square"></i>
         </a>
 
-        <a href="{% url 'delete_product' product.id %}"
+        <a href="{% url 'delete_product' product.id %}#product"
            class="btn btn-danger btn-sm"
            onclick="return confirm('Delete this product?')">
            <i class="bi bi-trash"></i>
@@ -187,8 +187,7 @@
 </div>
 
 <!-- ================= SPECIAL ITEMS ================= -->
-<div class="section-box">
-
+<div class="section-box" id="special">
 <h2><i class="bi bi-star-fill text-warning"></i> Special Items</h2>
 
 <form method="POST" enctype="multipart/form-data" class="row g-3">
@@ -270,11 +269,13 @@
     </td>
 
     <td>
-        <a href="{% url 'edit_special' item.id %}" class="btn btn-warning btn-sm">
-            <i class="bi bi-pencil-square"></i>
+        <a href="{% url 'edit_special' item.id %}#special"
+            class="btn btn-warning btn-sm">
+            <i class="bi bi-pencil-square">
+            </i>
         </a>
 
-        <a href="{% url 'delete_special' item.id %}"
+        <a href="{% url 'delete_special' item.id %}#special"
            class="btn btn-danger btn-sm"
            onclick="return confirm('Delete this special item?')">
            <i class="bi bi-trash"></i>
@@ -337,47 +338,83 @@
 
 
 
-===========================
+<!-- ===========================
 SALES REPORT
-===========================
+=========================== -->
 
 
 <div class="section-box">
 
 <h2><i class="bi bi-bar-chart"></i> Sales Report</h2>
 
-<div class="row text-center">
+<!-- Month Download -->
+<form method="GET" action="{% url 'report_month' %}" class="row g-2 mb-4">
 
 <div class="col-md-3">
+<input type="month" name="month" class="form-control">
+</div>
+
+<div class="col-md-2">
+<button type="submit" class="btn btn-dark">
+Download Monthly Report
+</button>
+</div>
+
+</form>
+
+<div class="row text-center g-3">
+
+<!-- Today -->
+<div class="col-md-4">
 <div class="card p-3">
-<h5>Today Sales</h5>
-<h3>₹ {{ today_sales }}</h3>
+<h6>Today Sales</h6>
+<h4>₹ {{ today_sales }}</h4>
+
+<a href="{% url 'report_today' %}" 
+class="btn btn-sm btn-dark mt-2">
+Print
+</a>
+
 </div>
 </div>
 
-<div class="col-md-3">
+<!-- Monthly -->
+<div class="col-md-4">
 <div class="card p-3">
-<h5>This Month</h5>
-<h3>₹ {{ month_sales }}</h3>
+<h6>This Month</h6>
+<h4>₹ {{ month_sales }}</h4>
+
+<a href="{% url 'report_month' %}" 
+class="btn btn-sm btn-dark mt-2">
+Print
+</a>
+
 </div>
 </div>
 
-<div class="col-md-3">
+<!-- Yearly -->
+<div class="col-md-4">
 <div class="card p-3">
-<h5>This Year</h5>
-<h3>₹ {{ year_sales }}</h3>
+<h6>This Year</h6>
+<h4>₹ {{ year_sales }}</h4>
+
+<a href="{% url 'report_year' %}" 
+class="btn btn-sm btn-dark mt-2">
+Print
+</a>
+
 </div>
 </div>
 
 </div>
 
 </div>
-
 
 
 <div class="section-box">
 
 <h2><i class="bi bi-receipt"></i> Orders</h2>
+<div class="table-responsive">
 
 <table class="table table-bordered">
 
@@ -407,6 +444,7 @@ View Bill
 {% endfor %}
 
 </table>
-
+</div>
+</div>
 </div>
 {% endblock %}

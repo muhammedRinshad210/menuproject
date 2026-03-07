@@ -51,6 +51,9 @@ urlpatterns = [
     path('decrease-special/<int:cart_id>/', views.decrease_special_cart, name='decrease_special_cart'),
     path('remove-special/<int:cart_id>/', views.remove_special_cart, name='remove_special_cart'),
     path("admin-bill/<int:order_id>/", views.admin_bill, name="admin_bill"),
+    path('report/today/', views.report_today, name='report_today'),
+path('report/month/', views.report_month, name='report_month'),
+path('report/year/', views.report_year, name='report_year'),
     
 
 ]
