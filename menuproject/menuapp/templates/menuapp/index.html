@@ -328,33 +328,6 @@ body{
     letter-spacing:1px;
     box-shadow:0 4px 10px rgba(0,0,0,0.2);
 }
-.category-card{
-    width:110px;
-    height:110px;
-    margin:auto;
-    background-size:contain;
-    background-repeat:no-repeat;
-    background-position:center;
-    transition:0.3s;
-}
-
-.category-card:hover{
-    transform:scale(1.1);
-}
-
-/* images */
-
-.juice-card{
-    background-image:url("{% static 'juice.png' %}");
-}
-
-.chai-card{
-    background-image:url("{% static 'chai.png' %}");
-}
-
-.fastfood-card{
-    background-image:url("{% static 'fastfood.png' %}");
-}
 </style>
 {% endblock %}
 
@@ -391,29 +364,33 @@ body{
 <!-- ================= CATEGORIES ================= -->
 
 <section class="categories">
+<div class="container">
+<h1 class="category-heading">Choose Your Category</h1>
+
 <div class="row text-center">
 
-<div class="col-4">
+<div class="col-4 category-card">
 <a href="{% url 'juices' %}">
-<div class="category-card juice-card"></div>
+<img src="{% static 'juice.png' %}">
 </a>
 <div class="category-title">JUICES</div>
 </div>
 
-<div class="col-4">
+<div class="col-4 category-card">
 <a href="{% url 'chai' %}">
-<div class="category-card chai-card"></div>
+<img src="{% static 'chai.png' %}">
 </a>
 <div class="category-title">CHAI & SNACKS</div>
 </div>
 
-<div class="col-4">
+<div class="col-4 category-card">
 <a href="{% url 'fastfood' %}">
-<div class="category-card fastfood-card"></div>
+<img src="{% static 'fastfood.png' %}">
 </a>
 <div class="category-title">FAST FOODS</div>
 </div>
 
+</div>
 </div>
 </section>
 
