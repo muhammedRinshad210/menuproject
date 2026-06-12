@@ -90,7 +90,7 @@ class Table(models.Model):
     qr_code = models.ImageField(upload_to='table_qr/', blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        qr_data = f"http://127.0.0.1:8000/table/{self.table_number}/"
+        qr_data = f"https://byte-studio-menu.onrender.com/table/{self.table_number}/"
 
         qr = qrcode.make(qr_data)
         canvas = BytesIO()
